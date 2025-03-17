@@ -20,20 +20,221 @@ import_pop_data <- function(year_start){
   N_2019 <- t(dt_pop_select[dt_pop_select$Year == 2019, grep("age", colnames(dt_pop_select))])
   
   colnames(N_2006) <- colnames(N_2013) <- colnames(N_2019) <- unique(dt_pop_select$Name)
-  # We use N_2006 as the population at t=0
-  if(year_start == 2010) N <- N_2006 else stop("Define N")
+  if(year_start == 2006 || year_start == 2010) N <- N_2006 else stop("Define N")
   return(N)
 }
 
-## Import vaccine data
-import_vaccine <- function(vax, scenario){
+## Import vaccine data => USE IF SCENARIO == "" TO ADD MORE SCENARIOS
+import_ehr_vaccine <- function(vax, scenario){
+  
   if(vax == "cover" & scenario == "reference") {
-    cov_per_year <- read.csv2(
-      "Data/coverage_cover_extrapol.csv", sep = ";") %>% as.data.table()
-  } else if(vax == "cprd" & scenario == "reference"){
-    cov_per_year <- read.csv2("Data/coverage_cprd_extrapol.csv", sep = ";") %>% 
+    cov_per_year <- read.csv2("Data/Coverage_reg_year_nhs_extrapol.csv",
+                              sep = ";") %>% 
       as.data.table()
-  } 
+  } else if(vax == "cprd" & scenario == "reference"){
+    cov_per_year <- read.csv2("Data/Coverage_reg_year_orig_extrapol.csv",
+                              sep = ";") %>% 
+      as.data.table()
+  }
+  
+  else if(vax == "cprd" & scenario == "early speedy"){
+    cov_per_year <- read.csv2("Data/Coverage_reg_year_earlytimely2nd_extrapol.csv",
+                              sep = ";") %>% 
+      as.data.table()
+  }
+  else if(vax == "cprd" & scenario == "early slow"){
+    cov_per_year <- read.csv2("Data/Coverage_slowearlysecond.csv",
+                              sep = ";") %>% 
+      as.data.table()
+  }
+  else if(vax == "cprd" & scenario == "London"){
+    cov_per_year <- read.csv2("Data/Coverage_reg_year_Londonpattern_extrapol.csv",
+                              sep = ";") %>% 
+      as.data.table()
+  }
+  else if(vax == "cprd" & scenario == "D1_025"){
+    cov_per_year <- read.csv2("Data/d1_025.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "D1_05"){
+    cov_per_year <- read.csv2("Data/d1_05.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "D1_1"){
+    cov_per_year <- read.csv2("Data/d1_1.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "D2_025"){
+    cov_per_year <- read.csv2("Data/d2_025.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "D2_05"){
+    cov_per_year <- read.csv2("Data/d2_05.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "D2_1"){
+    cov_per_year <- read.csv2("Data/d2_1.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "D2_3"){
+    cov_per_year <- read.csv2("Data/d2_3.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "D2_earlyplus025"){
+    cov_per_year <- read.csv2("Data/Coverage_earlyplus025.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "D2_earlyplus05"){
+    cov_per_year <- read.csv2("Data/Coverage_earlyplus05.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "D2_earlyplus1"){
+    cov_per_year <- read.csv2("Data/Coverage_earlyplus1.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  
+  else if(vax == "cprd" & scenario == "MMR2_as_MMR1"){
+    cov_per_year <- read.csv2("Data/Coverage_MMR2likeMMR1.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "MMR2_at5"){
+    cov_per_year <- read.csv2("Data/MMR2_at_5.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  
+  else if(vax == "cprd" & scenario == "old"){
+    cov_per_year <- read.csv2("Data/Coverage_reg_year_orig_extrapol.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  #lower uptake in early second dose
+  else if(vax == "cprd" & scenario == "earlyminus05"){
+    cov_per_year <- read.csv2("Data/Coverage_earlyminus05.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "earlyminus1"){
+    cov_per_year <- read.csv2("Data/Coverage_earlyminus1.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "earlyminus3"){
+    cov_per_year <- read.csv2("Data/Coverage_earlyminus3.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "earlyminus5"){
+    cov_per_year <- read.csv2("Data/Coverage_earlyminus5.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "earlyminus10"){
+    cov_per_year <- read.csv2("Data/Cov2minus10.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "earlyminus50"){
+    cov_per_year <- read.csv2("Data/Cov2minus50.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cprd" & scenario == "earlyminusall"){
+    cov_per_year <- read.csv2("Data/Cove2zero.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  
+  #sensitivity analsysis data
+  else if(vax == "cover" & scenario == "early"){
+    cov_per_year <- read.csv2("Data/COVER_earlyMMR2.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cover" & scenario == "cover_early"){
+    cov_per_year <- read.csv2("Data/COVER_earlyMMR2.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cover" & scenario == "cover_MMR2likeMMR1"){
+    cov_per_year <- read.csv2("Data/COVER_earlyMMR2_likeMMR1.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cover" & scenario == "cover_MMR2minus3"){
+    cov_per_year <- read.csv2("Data/COVER_earlyMMR2_minus3.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  
+  else if(vax == "cover" & scenario == "cover_MMR2minus5"){
+    cov_per_year <- read.csv2("Data/COVER_earlyMMR2_minus5.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+
+  else if(vax == "cover" & scenario == "cover_lateMMR2"){
+    cov_per_year <- read.csv2("Data/COVER_lateMMR2.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cover" & scenario == "cover_MMRplus1"){
+    cov_per_year <- read.csv2("Data/COVER_MMR1plus1.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  else if(vax == "cover" & scenario == "cover_MMRplus05"){
+    cov_per_year <- read.csv2("Data/COVER_MMR1plus0.5.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  
+  else if(vax == "cover" & scenario == "cover_MMR2plus1"){
+    cov_per_year <- read.csv2("Data/COVER_MMR2plus1.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  
   ## Formatting changes
   cov_per_year[, region := toupper(region)]
   cov_per_year[, dose := as.numeric(n_dose)]
@@ -64,14 +265,13 @@ import_vaccine <- function(vax, scenario){
   ## Coverage at 1 is 75% of coverage at 2
   dt_vacc[age == 1 & dose == 1, coverage := dt_vacc[age == 2 & dose == 1, coverage] * .75]
   ## Second dose coverage
-  if(scenario == "reference")
-    dt_vacc[age == 3 & dose == 2, coverage := dt_vacc[age == 4 & dose == 2, coverage] * .5]
+  dt_vacc[age == 3 & dose == 2, coverage := dt_vacc[age == 4 & dose == 2, coverage] * .5]
   dt_vacc[region == "EAST OF ENGLAND", region := "EAST"]
-  # Add ID column (unique for each row) with the year, region, dose and age
   dt_vacc[, id := paste(year, tolower(region), dose, age, sep = "_")]
   colnames(dt_vacc) <- c("years", "region", "vac_code", "coverage", "yob", "dose",
                          "age", "id")
   setkey(dt_vacc, id)
+  
   return(dt_vacc)
 }
 
@@ -92,6 +292,7 @@ compute_n_birth <- function(year_start, N_year){
                              ncol = length(unique(dt_pop_select$Name)))
   rownames(n_birth_per_year) <- seq(min(dt_pop_select$Year) - 5, max(dt_pop_select$Year))
   colnames(n_birth_per_year) <- unique(dt_pop_select$Name)
+  
   ## At each year, compute the number of new births as the number of inhabitants on yob
   age_n_birth <- c(0, 1, 2, 3, 4, 5)
   for(i in seq_len(nrow(dt_pop_select))){
@@ -111,17 +312,22 @@ compute_n_birth <- function(year_start, N_year){
 # Compute the distribution of individuals at t = 0
 compute_initial_state <- function(vax, scenario, N_age, regions, N){
   #### Define initial number of cases in compartment
-  # if the model is using the cprd data, use the adjusted values of coverage from 
-  # the risk assessment document, otherwise use unadjusted coverage (for data prior to 2004) 
   if(vax == "cprd") adj <- "Yes" else adj <- "No"
   N_reg <- length(regions)
-  dt_vacc <- import_vaccine(vax, scenario)
+  dt_vacc <- import_ehr_vaccine(vax, scenario)
 
   ## Define vaccine uptake and proportion of recovered at t = 0
   # In the first age group, everyone is susceptible
+  # year_start is 2010, 11 age groups: 
+  # - age0 and age1: born in 2010 everyone susceptible
+  # - age2 to age4: born 2008-2006: 1 vaccine dose
+  # - age5 to age 1620: born 2005-1990: 2 vaccine doses => Drop in coverage
+  # - age2140: born 90-70: ?
+  # - age40plot: born before 70: Full recovered
+  
   # source: vaccination data and UKHSA's measles risk assessment 
   
-  ## Initialise empty matrices for proportion of recovery and coverage
+  ## Initialise empty matrices
   recov <- matrix(0, ncol = N_reg, nrow = N_age, byrow = F)
   cov1 <- matrix(0, ncol = N_reg, nrow = N_age)
   cov2 <- matrix(0, ncol = N_reg, nrow = N_age)
@@ -142,12 +348,9 @@ compute_initial_state <- function(vax, scenario, N_age, regions, N){
         dt_vacc[yob == i & years == last_vacc & dose == 2, coverage]
     }
   }
-  # 2004 and before, use data from ukhsa risk assessment
-  # Coverage available for London, for all other regions use the national estimates
   past_cov <- as.data.table(read.csv2("Data/risk_assessment_ukhsa.csv", sep = ","))
   past_cov[, Coverage := as.numeric(Coverage) / 100]
-  
-  # born in 00-04: use the average coverage across all years
+  # born in 04-00
   cov1[7, ] <- mean(past_cov[Region == "England" & is.element(Year, seq(2000, 2004)) &
                                Dose == "MMR1" & Adjusted == adj, Coverage]) 
   cov2[7, ] <- mean(past_cov[Region == "England" & is.element(Year, seq(2000, 2004)) &
@@ -157,32 +360,28 @@ compute_initial_state <- function(vax, scenario, N_age, regions, N){
   cov2[7, "LONDON"] <- mean(past_cov[Region == "London" & is.element(Year, seq(2000, 2004)) &
                                        Dose == "MMR2" & Adjusted == adj, Coverage])
   
-  # Born in 95-99
-  cov1[8, ] <- mean(past_cov[Region == "England" & is.element(Year, seq(1995, 1999)) & 
-                               Dose == "MMR1" & Adjusted == adj, Coverage])
-  cov2[8, ] <- mean(past_cov[Region == "England" & is.element(Year, seq(1995, 1999)) & 
-                               Dose == "MMR2" & Adjusted == adj, Coverage])
-  cov1[8, "LONDON"] <- mean(past_cov[Region == "London" & is.element(Year, seq(1995, 1999)) & 
-                                       Dose == "MMR1" & Adjusted == adj, Coverage])
-  cov2[8, "LONDON"] <- mean(past_cov[Region == "London" & is.element(Year, seq(1995, 1999)) & 
-                                       Dose == "MMR2" & Adjusted == adj, Coverage])
+  # Born in 99-96
+  cov1[8, ] <- mean(past_cov[Region == "England" & is.element(Year, seq(1995, 1999)) & Dose == "MMR1" & Adjusted == adj, Coverage])# .95
+  cov2[8, ] <- mean(past_cov[Region == "England" & is.element(Year, seq(1995, 1999)) & Dose == "MMR2" & Adjusted == adj, Coverage])# .87
+  cov1[8, "LONDON"] <- mean(past_cov[Region == "London" & is.element(Year, seq(1995, 1999)) & Dose == "MMR1" & Adjusted == adj, Coverage])# .91
+  cov2[8, "LONDON"] <- mean(past_cov[Region == "London" & is.element(Year, seq(1995, 1999)) & Dose == "MMR2" & Adjusted == adj, Coverage])# .79
   
-  # Born in 91-95
+  # Born in 95-91
   cov1[9, ] <- mean(past_cov[Region == "England" & is.element(Year, seq(1990, 1994)) & 
-                               Dose == "MMR1" & Adjusted == adj, Coverage], na.rm = T)
+                               Dose == "MMR1" & Adjusted == adj, Coverage], na.rm = T)# .96
   cov2[9, ] <- mean(past_cov[Region == "England" & is.element(Year, seq(1990, 1994)) & 
-                               Dose == "MMR2" & Adjusted == adj, Coverage], na.rm = T)
+                               Dose == "MMR2" & Adjusted == adj, Coverage], na.rm = T)# .87
   cov1[9, "LONDON"] <- mean(past_cov[Region == "London" & is.element(Year, seq(1990, 1994)) & 
                                        Dose == "MMR1" & Adjusted == adj, Coverage],
-                            na.rm = T)
+                            na.rm = T)# .93
   cov2[9, "LONDON"] <- mean(past_cov[Region == "London" & is.element(Year, seq(1990, 1994)) & 
                                        Dose == "MMR2" & Adjusted == adj, Coverage], 
-                            na.rm = T)
+                            na.rm = T)# .79
   
-  # Born in 80-90
+  # Born in 90-80
   cov1[10, ] <- mean(past_cov[Region == "England" & Year < 1990 & 
                                 Dose == "MMR1" & Adjusted == adj, Coverage], 
-                     na.rm = T)
+                     na.rm = T)# .98
   cov1[10, "LONDON"] <- mean(past_cov[Region == "London" & Year < 1990 & 
                                         Dose == "MMR1" & Adjusted == adj, Coverage], 
                              na.rm = T)
@@ -191,7 +390,6 @@ compute_initial_state <- function(vax, scenario, N_age, regions, N){
   cov1[cov1 < 0] <- 0
   
   unvax <- 1 - cov1 - cov2
-  
   if(any(unvax > 1 | unvax < 0)) stop("Proportion should be between 0 and 1")
   
   ## Number of inhabitants in each compartment
@@ -209,7 +407,7 @@ compute_vax_cov <- function(age_names, year_start, N_year, N_age,
   # Compute the number of regions
   N_reg <- length(regions)
   # Import vaccine coverage
-  dt_vacc <- import_vaccine(vax, scenario)
+  dt_vacc <- import_ehr_vaccine(vax, scenario)
   # Create empty data table to compute the vaccine coverage per region / age / year
   vacc_per_age <- data.table(regions = rep(toupper(regions), N_age * N_year), 
                              age = rep(rep(age_names, each = N_reg), N_year),
@@ -248,12 +446,21 @@ compute_vax_cov <- function(age_names, year_start, N_year, N_age,
   ## Compute vaccine coverage in older ages from dt_vacc in previous years
   vacc_per_age[age == "age6to9", v1 := dt_vacc[paste(year - 2, tolower(regions), 1, 5, sep = "_"), coverage]]
   vacc_per_age[age == "age6to9", v2 := dt_vacc[paste(year - 2, tolower(regions), 2, 5, sep = "_"), coverage]]
-  vacc_per_age[age == "age11to15", v1 := dt_vacc[paste(year - 7, tolower(regions), 1, 5, sep = "_"), coverage]]
-  vacc_per_age[age == "age11to15", v2 := dt_vacc[paste(year - 7, tolower(regions), 2, 5, sep = "_"), coverage]]
-  vacc_per_age[age == "age16to20", v1 := dt_vacc[paste(year - 12, tolower(regions), 1, 5, sep = "_"), coverage]]
-  vacc_per_age[age == "age16to20", v2 := dt_vacc[paste(year - 12, tolower(regions), 2, 5, sep = "_"), coverage]]
-  vacc_per_age[age == "age21to30", v1 := dt_vacc[paste(year - 17, tolower(regions), 1, 5, sep = "_"), coverage]]
-  vacc_per_age[age == "age21to30", v2 := dt_vacc[paste(year - 17, tolower(regions), 2, 5, sep = "_"), coverage]]
+  
+   if(scenario == "old"){
+     
+     
+     vacc_per_age[age %in% c("age1" , "age2" , "age3" , "age4") &
+                    year >= 2010 & year <= 2020, v2 := 0] #only for years 2010-2020
+   }
+   
+  
+  # vacc_per_age[age == "age11to15", v1 := dt_vacc[paste(year - 7, tolower(regions), 1, 5, sep = "_"), coverage]]
+  # vacc_per_age[age == "age11to15", v2 := dt_vacc[paste(year - 7, tolower(regions), 2, 5, sep = "_"), coverage]]
+  # vacc_per_age[age == "age16to20", v1 := dt_vacc[paste(year - 12, tolower(regions), 1, 5, sep = "_"), coverage]]
+  # vacc_per_age[age == "age16to20", v2 := dt_vacc[paste(year - 12, tolower(regions), 2, 5, sep = "_"), coverage]]
+  # vacc_per_age[age == "age21to30", v1 := dt_vacc[paste(year - 17, tolower(regions), 1, 5, sep = "_"), coverage]]
+  # vacc_per_age[age == "age21to30", v2 := dt_vacc[paste(year - 17, tolower(regions), 2, 5, sep = "_"), coverage]]
   vacc_per_age[is.na(v1), v1 := 0]
   vacc_per_age[is.na(v2), v2 := 0]
   
@@ -281,49 +488,60 @@ compute_vax_cov <- function(age_names, year_start, N_year, N_age,
                       dimnames = list(unique(vacc_per_age$age), 
                                       unique(vacc_per_age$regions))
   )[,, rep(seq_len(N_year), each  = 365)]
+  
   return(list(array_cov1 = array_cov1, array_cov2 = array_cov2))
 }
 
-## Compute contact matrix between age groups
 compute_contact_matrix <- function(year_per_age){
   ## Define contact matrix
   data(polymod)
-  
-  ## Get the transmission matrix weighted by the population in each age band from 
-  ## socialmixr (equal to the contact rate per capita)
-  ref_m <- 1e6 * socialmixr::contact_matrix(
+  ## Get the contact matrix from socialmixr
+  contact <- socialmixr::contact_matrix(
     survey = polymod,
     countries = "United Kingdom",
     age.limits = cumsum(year_per_age) - year_per_age,
-    symmetric = TRUE, per.capita = T)$matrix.per.capita
+    symmetric = TRUE)
   
+  ## Transform the matrix to the (symetrical) transmission matrix
+  ## rather than the contact matrix. This transmission matrix is
+  ## weighted by the population in each age band (equal to the contact 
+  ## rate per capita).
+  ref_m <- 1e6 * contact$matrix /
+    rep(contact$demography$population, each = ncol(contact$matrix))
+  
+  # # The number of contacts between groups is smaller than within groups
   rownames(ref_m) <- colnames(ref_m) <- 
     paste(cumsum(year_per_age) - year_per_age, cumsum(year_per_age), sep = "-")
   return(ref_m)
 }
 
-## Compute the number of reported importations per year (from UKHSA's epi data)
 compute_importation <- function(regions, N_age, scenario_import = "per_year"){
-  # Cases classified as imported or possible import in the epi data. 
-  mean_import_per_reg <- matrix(c(4, 2,  4,  1, 1,  8, 12, 10, 2,
-                                  1, 6,  3,  3, 10, 4, 55, 30, 10,
-                                  2, 10, 4,  2, 6,  3, 10, 7,  5,
-                                  6, 5,  3,  2, 2,  6, 7,  3,  2,
-                                  1, 4,  1,  2, 3,  3, 19, 4,  1,
-                                  1, 2,  0,  1, 2,  1, 11, 1,  4,
-                                  0, 1,  1,  0, 0,  3, 15, 5,  3,
-                                  2, 6,  2,  1, 4,  4, 19, 3,  2,
-                                  1, 3,  13, 4, 5,  1, 36, 10, 4,
-                                  1, 6,  4,  6, 2,  8, 39, 14, 4),
+  ## Define number of import per day
+  if(scenario_import == "pop"){
+    mean_import_per_reg <- sum(c(1.6, 3.2, 3.0, 2.0, 2.3, 3.2, 20.1, 7.6, 3.2)) / 365.25 /  N_age *
+      colSums(N) / sum(N)
+  } else if(scenario_import == "per_year"){ 
+    # Cases classified as imported or possible import in the epi data. 
+    mean_import_per_reg <- matrix(c(4, 2,  4,  1, 1,  8, 12, 10, 2,
+                                    1, 6,  3,  3, 10, 4, 55, 30, 10,
+                                    2, 10, 4,  2, 6,  3, 10, 7,  5,
+                                    6, 5,  3,  2, 2,  6, 7,  3,  2,
+                                    1, 4,  1,  2, 3,  3, 19, 4,  1,
+                                    1, 2,  0,  1, 2,  1, 11, 1,  4,
+                                    0, 1,  1,  0, 0,  3, 15, 5,  3,
+                                    2, 6,  2,  1, 4,  4, 19, 3,  2,
+                                    1, 3,  13, 4, 5,  1, 36, 10, 4,
+                                    1, 6,  4,  6, 2,  8, 39, 14, 4),
                                   ncol = length(regions), byrow = T
     )/365.25/  N_age
     colnames(mean_import_per_reg) <- regions
+  } else {
+    mean_import_per_reg <- (c(1.6, 3.2, 3.0, 2.0, 2.3, 3.2, 20.1, 7.6, 3.2) / N_age) / 365.25# * 5
+  }
   return(mean_import_per_reg)
 }
 
-## Import all data using all other functions, and return in a list
 import_all_data <- function(year_start, N_year, scenario, vax, regions, age){
-  ## Number of inhabitants per age group
   N <- import_pop_data(year_start)
   
   ## Time spent in each age group
@@ -360,8 +578,6 @@ import_all_data <- function(year_start, N_year, scenario, vax, regions, age){
   
   ## Compute number of importations per region / year
   mean_import_per_reg <- compute_importation(regions, N_age = nrow(N))
-  
-  ## Return a list containing all data
   list_data <- 
     append(append(list_state, list_array_cov), list(
       ref_m = ref_m, ref_d = ref_d, new_birth = new_birth, 
@@ -371,54 +587,3 @@ import_all_data <- function(year_start, N_year, scenario, vax, regions, age){
   return(list_data)
 }
 
-## Import case data
-import_case_data <- function(state_names, regions, age, vacc_yes, year_start, N_year, 
-                             anoun = TRUE){
-  ## Import case file
-  if(anoun){
-    data_anoun <- as.data.table(readRDS("Data/sim_data.RDS"))
-  } else{
-    stop("Set anoun as TRUE to use simulated case data.")
-  }
-  
-  ## Remove cases outside 
-  date_start <- as.Date(paste0(year_start, "-01-01"))
-  date_end <- as.Date(paste0(year_start + N_year, "-01-01"))
-  data_anoun <- data_anoun[date > date_start,]
-  data_anoun <- data_anoun[date < date_end,]
-  data_anoun[, date := as.numeric(as.Date(date) - date_start)]
-  data_anoun[, date := factor(date, levels = seq(1, max(date)))]
-  
-  ## Rename categories
-  data_anoun[region == "East of England", region := "East"]
-  data_anoun[is.na(vaccinated), vaccinated := "new_IS"]
-  data_anoun[vaccinated == "mmr x2", vaccinated := "new_IV2"]
-  data_anoun[vaccinated == "mmr x1", vaccinated := "new_IV1"]
-  data_anoun[vaccinated == "no", vaccinated := "new_IS"]
-  data_anoun[, vaccinated := factor(vaccinated)]
-  data_anoun[, age_groups := factor(age_groups, levels = age)]
-  data_anoun[, region := factor(toupper(region), levels = toupper(regions))]
-  
-  ## Convert data_anoun to number of entries by date / vaccination status / region and age group
-  data_anoun <- data_anoun[, data.table(table(date, vaccinated, region, age_groups))]
-  
-  data_anoun[, vaccinated := as.character(vaccinated)]
-  
-  ## Set individuals classified as "yes" as v1 or v2 (v1 by default)
-  if(vacc_yes == "v1" & any(data_anoun$vaccinated == "yes")){
-    data_anoun[vaccinated == "new_IV1", 
-               N := data_anoun[vaccinated == "new_IV1", N] + 
-                 data_anoun[vaccinated == "yes", N]]
-  } else if(vacc_yes == "v2" & any(data_anoun$vaccinated == "yes")){
-    data_anoun[vaccinated == "new_IV2", 
-               N := data_anoun[vaccinated == "new_IV2", N] + 
-                 data_anoun[vaccinated == "yes", N]]
-  } else if(any(data_anoun$vaccinated == "yes")) 
-    stop("vacc_yes should be v1 or v2")
-  
-  ## Remove entries with vaccinated == "yes"
-  data_anoun <- data_anoun[vaccinated != "yes",]
-  data_anoun[, vaccinated := factor(vaccinated)]
-  
-  return(data_anoun)
-}
