@@ -10,7 +10,7 @@ yearly_cases_fig_flexible_new <- function(dt_output1, dt_output2, name1, name2,
                                 dt_output1[rows_new_cases,,] %>% colSums())
   
   
-  time <- dt_output1[1, 1, ]
+  time <- time <- seq(2010, 2019, 1) 
   colnames(new_cases) <- c("reg", "iter", as.character(time))
   rm(dt_output1)
   gc()
@@ -20,16 +20,16 @@ yearly_cases_fig_flexible_new <- function(dt_output1, dt_output2, name1, name2,
                                  names_to = "time",
                                  values_to = "new_cases")
   long_new_cases <- as.data.table(long_new_cases)
-  long_new_cases$time <- long_new_cases$time %>% as.numeric %>% as.Date(origin = "1970-01-01")
+  long_new_cases$time <- long_new_cases$time %>% as.numeric
   
   ## Aggregate by region / iteration / year
-  cases_per_year <- long_new_cases[, lapply(.SD, sum), by = .(iter, year(time), reg)]
+  cases_per_year <- long_new_cases[, lapply(.SD, sum), by = .(iter, time, reg)]
   
   #average number of cases by iteration
   tmp1 <- data.table()
   for(i in 2010:2019){
     
-    vec <- quantile(cases_per_year[year == i, new_cases], probs = c(0.025, 0.125, 0.25, 0.5, 0.75, 0.875, 0.975))
+    vec <- quantile(cases_per_year[time == i, new_cases], probs = c(0.025, 0.125, 0.25, 0.5, 0.75, 0.875, 0.975))
     new_row <- data.table(year = i, lb_95 = vec[[1]], lb_75= vec[[2]], lb_50 = vec[[3]], 
                           median = vec[[4]], ub_50 = vec[[5]], ub_75 = vec[[6]], ub_95 = vec[[7]])
     tmp1 <- rbind(tmp1, new_row)
@@ -44,7 +44,7 @@ yearly_cases_fig_flexible_new <- function(dt_output1, dt_output2, name1, name2,
                                 dt_output2[rows_new_cases,,] %>% colSums())
   
   
-  time <- dt_output2[1, 1, ]
+  time <- time <- seq(2010, 2019, 1) 
   colnames(new_cases) <- c("reg", "iter", as.character(time))
   rm(dt_output2)
   gc()
@@ -54,16 +54,16 @@ yearly_cases_fig_flexible_new <- function(dt_output1, dt_output2, name1, name2,
                                  names_to = "time",
                                  values_to = "new_cases")
   long_new_cases <- as.data.table(long_new_cases)
-  long_new_cases$time <- long_new_cases$time %>% as.numeric %>% as.Date(origin = "1970-01-01")
+  long_new_cases$time <- long_new_cases$time %>% as.numeric 
   
   ## Aggregate by region / iteration / year
-  cases_per_year <- long_new_cases[, lapply(.SD, sum), by = .(iter, year(time), reg)]
+  cases_per_year <- long_new_cases[, lapply(.SD, sum), by = .(iter, time, reg)]
   
   #average number of cases by iteration
   tmp2 <- data.table()
   for(i in 2010:2019){
     
-    vec <- quantile(cases_per_year[year == i, new_cases], probs = c(0.025, 0.125, 0.25, 0.5, 0.75, 0.875, 0.975))
+    vec <- quantile(cases_per_year[time == i, new_cases], probs = c(0.025, 0.125, 0.25, 0.5, 0.75, 0.875, 0.975))
     new_row <- data.table(year = i, lb_95 = vec[[1]], lb_75= vec[[2]], lb_50 = vec[[3]], 
                           median = vec[[4]], ub_50 = vec[[5]], ub_75 = vec[[6]], ub_95 = vec[[7]])
     tmp2 <- rbind(tmp2, new_row)
@@ -77,7 +77,7 @@ yearly_cases_fig_flexible_new <- function(dt_output1, dt_output2, name1, name2,
   tmp <- tmp[, scenario := factor(scenario, levels = c(name1, name2), ordered = T)]
   
   plot <- tmp %>%
-    ggplot(aes(x = year, group = scenario))+
+    ggplot(aes(x = time, group = scenario))+
     geom_line(aes(y = median, color = scenario))+
     scale_color_manual(values = c(color1, color2))+ 
     geom_ribbon (aes(ymin = lb_50, ymax = ub_50 ,  fill = scenario ),  alpha = 0.3, linetype = 0)+
@@ -111,7 +111,7 @@ yearly_cases_fig_flexible_higher_y <- function(dt_output1, dt_output2, name1, na
                                 dt_output1[rows_new_cases,,] %>% colSums())
   
   
-  time <- dt_output1[1, 1, ]
+  time <- time <- seq(2010, 2019, 1) 
   colnames(new_cases) <- c("reg", "iter", as.character(time))
   rm(dt_output1)
   gc()
@@ -121,16 +121,16 @@ yearly_cases_fig_flexible_higher_y <- function(dt_output1, dt_output2, name1, na
                                  names_to = "time",
                                  values_to = "new_cases")
   long_new_cases <- as.data.table(long_new_cases)
-  long_new_cases$time <- long_new_cases$time %>% as.numeric %>% as.Date(origin = "1970-01-01")
+  long_new_cases$time <- long_new_cases$time %>% as.numeric 
   
   ## Aggregate by region / iteration / year
-  cases_per_year <- long_new_cases[, lapply(.SD, sum), by = .(iter, year(time), reg)]
+  cases_per_year <- long_new_cases[, lapply(.SD, sum), by = .(iter, time, reg)]
   
   #average number of cases by iteration
   tmp1 <- data.table()
   for(i in 2010:2019){
     
-    vec <- quantile(cases_per_year[year == i, new_cases], probs = c(0.025, 0.125, 0.25, 0.5, 0.75, 0.875, 0.975))
+    vec <- quantile(cases_per_year[time == i, new_cases], probs = c(0.025, 0.125, 0.25, 0.5, 0.75, 0.875, 0.975))
     new_row <- data.table(year = i, lb_95 = vec[[1]], lb_75= vec[[2]], lb_50 = vec[[3]], 
                           median = vec[[4]], ub_50 = vec[[5]], ub_75 = vec[[6]], ub_95 = vec[[7]])
     tmp1 <- rbind(tmp1, new_row)
@@ -145,7 +145,7 @@ yearly_cases_fig_flexible_higher_y <- function(dt_output1, dt_output2, name1, na
                                 dt_output2[rows_new_cases,,] %>% colSums())
   
   
-  time <- dt_output2[1, 1, ]
+  time <- time <- seq(2010, 2019, 1) 
   colnames(new_cases) <- c("reg", "iter", as.character(time))
   rm(dt_output2)
   gc()
@@ -155,16 +155,16 @@ yearly_cases_fig_flexible_higher_y <- function(dt_output1, dt_output2, name1, na
                                  names_to = "time",
                                  values_to = "new_cases")
   long_new_cases <- as.data.table(long_new_cases)
-  long_new_cases$time <- long_new_cases$time %>% as.numeric %>% as.Date(origin = "1970-01-01")
+  long_new_cases$time <- long_new_cases$time %>% as.numeric 
   
   ## Aggregate by region / iteration / year
-  cases_per_year <- long_new_cases[, lapply(.SD, sum), by = .(iter, year(time), reg)]
+  cases_per_year <- long_new_cases[, lapply(.SD, sum), by = .(iter, time, reg)]
   
   #average number of cases by iteration
   tmp2 <- data.table()
   for(i in 2010:2019){
     
-    vec <- quantile(cases_per_year[year == i, new_cases], probs = c(0.025, 0.125, 0.25, 0.5, 0.75, 0.875, 0.975))
+    vec <- quantile(cases_per_year[time == i, new_cases], probs = c(0.025, 0.125, 0.25, 0.5, 0.75, 0.875, 0.975))
     new_row <- data.table(year = i, lb_95 = vec[[1]], lb_75= vec[[2]], lb_50 = vec[[3]], 
                           median = vec[[4]], ub_50 = vec[[5]], ub_75 = vec[[6]], ub_95 = vec[[7]])
     tmp2 <- rbind(tmp2, new_row)
@@ -178,7 +178,7 @@ yearly_cases_fig_flexible_higher_y <- function(dt_output1, dt_output2, name1, na
   tmp <- tmp[, scenario := factor(scenario, levels = c(name1, name2), ordered = T)]
   
   plot <- tmp %>%
-    ggplot(aes(x = year, group = scenario))+
+    ggplot(aes(x = time, group = scenario))+
     geom_line(aes(y = median, color = scenario))+
     scale_color_manual(values = c(color1, color2))+ 
     geom_ribbon (aes(ymin = lb_50, ymax = ub_50 ,  fill = scenario ),  alpha = 0.3, linetype = 0)+

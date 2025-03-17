@@ -181,6 +181,10 @@ gc()
 
 #---summary table for results
 all_models <- list.files("Output/models/")
+unwanted1 <- list.files("Output/models/", pattern = "_cover.rda")
+unwanted2 <- list.files("Output/models/", pattern = "waningCPRD.rda")
+tmp<- setdiff(all_models, unwanted1)
+tmp<- setdiff(tmp, unwanted2)
 tmp <- readRDS(paste0("Output/models/", all_models[1]))
 tmp <- tmp[grep("new_I", rownames(tmp)), ,]
 summary_table <- summary(apply(tmp, 2, sum))
