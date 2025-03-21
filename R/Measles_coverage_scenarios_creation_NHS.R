@@ -106,10 +106,10 @@ write.table(tmp1d, file =  paste0("Data/",
 
 #MMR2 early plus 3%
 tmp1e <- data.table::copy(tmp1)
-tmp1e[n_dose == 2, cov5y := cov5y+0.01]
-tmp1e[n_dose ==2, cov3y := cov3y + 0.01]
-tmp1e[n_dose ==2, cov4y := cov4y + 0.01]
-tmp1e[n_dose ==2, cov2y := cov2y + 0.01]
+tmp1e[n_dose == 2, cov5y := cov5y+0.03]
+tmp1e[n_dose ==2, cov3y := cov3y + 0.03]
+tmp1e[n_dose ==2, cov4y := cov4y + 0.03]
+tmp1e[n_dose ==2, cov2y := cov2y + 0.03]
 tmp1e[n_dose == 2, cov1y := 0]
 write.table(tmp1e, file =  paste0("Data/",
                                   "COVER_earlyMMR2plus3.csv"),
@@ -155,8 +155,20 @@ tmp4[n_dose ==1, cov2y := cov2y + 0.005]
 tmp4[n_dose == 1, cov1y := cov1y + 0.005]
 
 write.table(tmp4, file =  paste0("Data/",
-                                 "COVER_MMR1plus0.5.csv"),
+                                 "COVER_MMR1plus05.csv"),
             sep = ";", dec = ".", row.names = FALSE)
 
+#improving MMR1 by 0.25%
+
+tmp5 <- data.table::copy(df)
+tmp5[n_dose == 1, cov5y := cov5y+0.0025]
+tmp5[n_dose ==1, cov3y := cov3y + 0.0025]
+tmp5[n_dose ==1, cov4y := cov4y + 0.0025]
+tmp5[n_dose ==1, cov2y := cov2y + 0.0025]
+tmp5[n_dose == 1, cov1y := cov1y + 0.0025]
+
+write.table(tmp5, file =  paste0("Data/",
+                                 "COVER_MMR1plus025.csv"),
+            sep = ";", dec = ".", row.names = FALSE)
 
 

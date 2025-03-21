@@ -77,7 +77,7 @@ yearly_cases_fig_flexible_new <- function(dt_output1, dt_output2, name1, name2,
   tmp <- tmp[, scenario := factor(scenario, levels = c(name1, name2), ordered = T)]
   
   plot <- tmp %>%
-    ggplot(aes(x = time, group = scenario))+
+    ggplot(aes(x = year, group = scenario))+
     geom_line(aes(y = median, color = scenario))+
     scale_color_manual(values = c(color1, color2))+ 
     geom_ribbon (aes(ymin = lb_50, ymax = ub_50 ,  fill = scenario ),  alpha = 0.3, linetype = 0)+
@@ -178,7 +178,7 @@ yearly_cases_fig_flexible_higher_y <- function(dt_output1, dt_output2, name1, na
   tmp <- tmp[, scenario := factor(scenario, levels = c(name1, name2), ordered = T)]
   
   plot <- tmp %>%
-    ggplot(aes(x = time, group = scenario))+
+    ggplot(aes(x = year, group = scenario))+
     geom_line(aes(y = median, color = scenario))+
     scale_color_manual(values = c(color1, color2))+ 
     geom_ribbon (aes(ymin = lb_50, ymax = ub_50 ,  fill = scenario ),  alpha = 0.3, linetype = 0)+
