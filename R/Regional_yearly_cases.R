@@ -24,7 +24,7 @@ regional_cases <- function(output){
 
 #table of yearly cases by scenario
 yearly_cases <- function(output){
-  tmp <- readRDS(paste0("Output/models/", "reference.rda"))
+  tmp <- readRDS(paste0("Output/models/", output))
   rows_new_cases <- rownames(tmp)[grep("new_I", rownames(tmp))]
   yearly_cases <- data.table(year =  seq(2010, 2019, 1),
                                median = rep(0, times = 10),
@@ -44,4 +44,39 @@ yearly_cases <- function(output){
 }
 
 #############################################################################
+
+#regional cases for reference, early MMR2, and MMR1+0.5
+
+reference <-regional_cases("reference.rda")
+reference[, IQR_ref := paste0(median, " (", lb, ";", ub, ")")]
+earlyMMR2 <-regional_cases("early_second.rda")
+earlyMMR2[, IQR_early := paste0(median, " (", lb, ";", ub, ")")]
+MMR1plu05 <- regional_cases("D1_05.rda")
+MMR1plu05[, IQR_MMR1 := paste0(median, " (", lb, ";", ub, ")")]
+
+reference <- reference[, list(region, IQR_ref)]
+earlyMMR2 <- earlyMMR2[, list( IQR_early)]
+MMR1plu05 <- MMR1plu05[, list( IQR_MMR1)]
+
+res <- cbind(reference, earlyMMR2, MMR1plu05)
+
+
+write.csv2(res, file = "Output/regional_cases.csv")
+
+#yearly cases by scenario
+reference <-yearly_cases("reference.rda")
+reference[, IQR_ref := paste0(median, " (", lb, ";", ub, ")")]
+earlyMMR2 <-yearly_cases("early_second.rda")
+earlyMMR2[, IQR_early := paste0(median, " (", lb, ";", ub, ")")]
+MMR1plu05 <- yearly_cases("D1_05.rda")
+MMR1plu05[, IQR_MMR1 := paste0(median, " (", lb, ";", ub, ")")]
+
+reference <- reference[, list(year, IQR_ref)]
+earlyMMR2 <- earlyMMR2[, list( IQR_early)]
+MMR1plu05 <- MMR1plu05[, list( IQR_MMR1)]
+
+res2 <- cbind(reference, earlyMMR2, MMR1plu05)
+
+write.csv2(res2, file = "Output/yearly_cases.csv")
+
 
