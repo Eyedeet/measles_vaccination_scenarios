@@ -215,75 +215,17 @@ summary_table <- cbind(c("MMR1 +0.25","MMR1 +0.5","MMR1 +1",
                          "MMR2 -3","MMR2 -5","early second","early MMR2 like MMR1",
                          "MMR2 at 5", "reference"), summary_table)
 summary_table <- as.data.table(summary_table)
-summary_table[, result := paste0(`Median`, " (", `1st Qu.`, " ;", `3rd Qu.`, ")")]
+summary_table[, result := paste0(`Median`, " (", `1st Qu.`, "; ", `3rd Qu.`, ")")]
 med_ref <- as.numeric(summary_table$Median[16])
 summary_table[, Median := as.numeric(Median)]
 summary_table[, `1st Qu.` := as.numeric(`1st Qu.`)]
 summary_table[, `3rd Qu.` := as.numeric(`3rd Qu.`)]
 summary_table[, diff_per := paste0(round(100-((Median/med_ref)*100),digits = 2),
-                                   " (" ,round(100-((`1st Qu.`/med_ref)*100), digits = 2),
-                                   " ;", round(100-((`3rd Qu.`/med_ref)*100), digits = 2), ")")]
+                                   " (" ,round(100-((`3rd Qu.`/med_ref)*100), digits = 2),
+                                   "; ", round(100-((`1st Qu.`/med_ref)*100), digits = 2), ")")]
 
 write.csv2(summary_table, file = "Output/Summary_table_CPRD_waning.csv")
 
 
 #comparing the scenarios in graphs
 #imrproving coverage
-plot1 <- yearly_cases_fig_flexible_new("reference_waningCPRD.rda","D2_1_waningCPRD.rda"  , 
-                                       "Reference","MMR2 +1%",
-                                       "#2c5985", "#c4263e")
-plot2 <- yearly_cases_fig_flexible_new("D2_1_waningCPRD.rda", "D2_3_waningCPRD.rda",
-                                       "MMR2 + 1%","MMR2 +3%", 
-                                       "#c4263e", "#3a95b1")
-plot3 <- yearly_cases_fig_flexible_new("D2_3_waningCPRD.rda", "D1_1_waningCPRD.rda",
-                                       "MMR2 +3%","MMR1 +1%", 
-                                       "#3a95b1","#ed5f54" )
-
-library(cowplot)
-plt <- plot_grid(plot1, plot2, plot3,
-                 ncol = 1, nrow = 3, 
-                 labels = c('A', 'B', 'C'),
-                 label_size = 22,
-                 label_y = 1.01,
-                 label_x = 0.01,
-                 scale = 0.9)
-ggsave("Figures/Coverage_CPRD_no_waning.png",
-       plt,
-       width =  6,
-       height = 14,
-       bg = "white")
-
-#changing schedule
-plot1 <- yearly_cases_fig_flexible_higher_y("reference_waningCPRD.rda", "MMR2_at_5_waningCPRD.rda",
-                                            "Reference","School entry MMR2", 
-                                            "#2c5985","#c4263e")
-plot2<- yearly_cases_fig_flexible_new("reference_waningCPRD.rda", "early_second_waningCPRD.rda",
-                                      "Reference","Early MMR2", 
-                                      "#2c5985","#ed5f54")
-plot3 <- yearly_cases_fig_flexible_new("early_second_waningCPRD.rda", "D2_earlyplus1_waningCPRD.rda",
-                                       "Early MMR2","Early MMR2 +1%", 
-                                       "#ed5f54","#3a95b1")
-plot4 <- yearly_cases_fig_flexible_new("D2_earlyplus1_waningCPRD.rda", "MMR2_as_MMR1_waningCPRD.rda",
-                                       "Early MMR2 +1%","Early MMR2 like MMR1", 
-                                       "#3a95b1","#f77964")
-plot5 <- yearly_cases_fig_flexible_new("early_second_waningCPRD.rda", "D2_minus3_waningCPRD.rda",
-                                       "Early MMR2","Early MMR2 -3%", 
-                                       "#ed5f54","#2e5b88")
-plot6 <- yearly_cases_fig_flexible_new("early_second_waningCPRD.rda", "D2_minus5_waningCPRD.rda",
-                                       "Early MMR2","Early MMR2 -5%", 
-                                       "#ed5f54","#2a5783")
-
-#improving coverage vs the schedule
-plt <- plot_grid(plot1, plot2, plot3, plot4, 
-                 plot5, plot6,
-                 ncol = 2, nrow = 3, 
-                 labels = c('A', 'B', 'C', 'D', 'E', 'F'),
-                 label_size = 22,
-                 label_y = 1.01,
-                 label_x = 0.01,
-                 scale = 0.9)
-ggsave("Figures/Schedule_CPRD_no_waning.png",
-       plt,
-       width =  12,
-       height = 14,
-       bg = "white")

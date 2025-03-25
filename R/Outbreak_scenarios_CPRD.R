@@ -7,7 +7,7 @@
 #set up
 options(scipen = 999)
 source("R/function_figures.R")
-source("R/import_vaccination_data.R")
+source("R/function_vaccination_data.R")
 
 ## Import libraries 
 #devtools::install_github("alxsrobert/seirvodin")
@@ -164,6 +164,10 @@ saveRDS(D2_05, file="Output/models/D2_05.rda")
 rm(D2_05)
 gc()
 
+D1_025 <- create_scenario(scenario_name = "D1_025")
+saveRDS(D1_025, file="Output/models/D1_025.rda")
+rm(D1_025)
+gc()
 
 
 
@@ -182,9 +186,9 @@ gc()
 #---summary table for results
 all_models <- list.files("Output/models/")
 unwanted1 <- list.files("Output/models/", pattern = "_cover.rda")
-unwanted2 <- list.files("Output/models/", pattern = "waningCPRD.rda")
+unwanted2 <- list.files("Output/models/", pattern = "waning")
 tmp<- setdiff(all_models, unwanted1)
-tmp<- setdiff(tmp, unwanted2)
+all_models<- setdiff(tmp, unwanted2)
 tmp <- readRDS(paste0("Output/models/", all_models[1]))
 tmp <- tmp[grep("new_I", rownames(tmp)), ,]
 summary_table <- summary(apply(tmp, 2, sum))
@@ -203,21 +207,21 @@ for(i in 2:length(all_models)){
 }
 
 #generating summary table
-summary_table <- cbind(c("MMR1 +0.5","MMR1 +1",
+summary_table <- cbind(c("MMR1 + 0.25%", "MMR1 +0.5","MMR1 +1",
                          "MMR2 +0.5","MMR2 +1",
                          "MMR2 + 3",
                          "early +0.25", "early +0.5","early +1",
                          "MMR2 -3","MMR2 -5","early second","early MMR2 like MMR1",
                          "MMR2 at 5", "reference"), summary_table)
 summary_table <- as.data.table(summary_table)
-summary_table[, result := paste0(`Median`, " (", `1st Qu.`, " ;", `3rd Qu.`, ")")]
-med_ref <- as.numeric(summary_table$Median[14])
+summary_table[, result := paste0(`Median`, " (", `1st Qu.`, "; ", `3rd Qu.`, ")")]
+med_ref <- as.numeric(summary_table$Median[15])
 summary_table[, Median := as.numeric(Median)]
 summary_table[, `1st Qu.` := as.numeric(`1st Qu.`)]
 summary_table[, `3rd Qu.` := as.numeric(`3rd Qu.`)]
 summary_table[, diff_per := paste0(round(100-((Median/med_ref)*100),digits = 2),
-                                   " (" ,round(100-((`1st Qu.`/med_ref)*100), digits = 2),
-                                   " ;", round(100-((`3rd Qu.`/med_ref)*100), digits = 2), ")")]
+                                   " (" ,round(100-((`3rd Qu.`/med_ref)*100), digits = 2),
+                                   "; ", round(100-((`1st Qu.`/med_ref)*100), digits = 2), ")")]
 
 write.csv2(summary_table, file = "Output/Summary_table_CPRD.csv")
 
