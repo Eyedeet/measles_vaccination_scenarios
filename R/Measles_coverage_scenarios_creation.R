@@ -1,7 +1,74 @@
 #set up 
 library(tidyverse)
 library(rlang)
+library(arrow)
+library(data.table)
 options(scipen = 999)
+
+################################################################################
+#functions
+#---vaccination coverage at ages 1, 2, and 5 plus 95%-CI
+vacc_age <- function(data, vac, age_vac, start, end, vac_dose){
+  
+  n <- nrow(data[vaccine == vac &
+                   age <= age_vac &
+                   age_startfu <= start &
+                   age_endfu >= end &
+                   n_dose == vac_dose])
+  return(n)
+}
+
+pop_vacc <- function(data_p, start, end){
+  
+  n <- nrow(data_p[age_startfu <= start & age_endfu >= end])
+  return(n)
+}
+
+
+coverage_1y <- function(vacc, dose, df, df_p){
+  
+  a <- vacc_age(data = df, vac = vacc, age = 365, start = 40, end = 365, vac_dose = dose)
+  b <-  pop_vacc(data_p = df_p, start = 40, end = 365)
+  
+  return((a/b))
+}
+
+
+coverage_2y <- function(vacc, dose, df, df_p){
+  
+  a <- vacc_age(data = df, vac = vacc, age = 731, start = 40, end = 731, vac_dose = dose)
+  b <-  pop_vacc(data_p = df_p, start = 40, end = 731)
+  
+  return((a/b))
+}
+
+coverage_3y <- function(vacc, dose, df, df_p){
+  
+  a <- vacc_age(data = df, vac = vacc, age = 1096, start = 40, end = 1096, vac_dose = dose)
+  b <-  pop_vacc(data_p = df_p, start = 40, end = 1096)
+  
+  return((a/b))
+}
+
+coverage_4y <- function(vacc, dose, df, df_p){
+  
+  a <- vacc_age(data = df, vac = vacc, age = 1461, start = 40, end = 1461, vac_dose = dose)
+  b <-  pop_vacc(data_p = df_p, start = 40, end = 1461)
+  
+  return((a/b))
+  }
+
+
+coverage_5y <- function(vacc, dose, df, df_p){
+  
+  a <- vacc_age(data = df, vac = vacc, age = 1826, start = 40, end = 1826, vac_dose = dose)
+  b <-  pop_vacc(data_p = df_p, start = 40, end = 1826)
+  
+  return((a/b))
+}
+
+
+################################################################################
 
 df <- read_parquet(paste0(datafiles, "outcomes.parquet"))
 pop <- read_parquet(paste0(datafiles, "study_population.parquet"))
@@ -670,15 +737,15 @@ cov_all[n_dose == 1, cov1y := 0.75*cov2y]
 
  
 ################################################################################
-#second dose at the age of two but with uptake speed of old second dose
- 
- df <- read.csv2(paste0("Data/",
+ #second early but as timely as first 
+ #first doesn't improve after second year
+ df <- data.table(read.csv2(paste0("Data/",
                         "Coverage_reg_year_orig_extrapol.csv"),
-                 sep = ";", dec = ".")
-
- df <- df[vaccine == "MMR"]
- df <- df[n_dose == 2, age := age-977]
- 
+                 sep = ";", dec = "."))
+ df <- df[n_dose == 1, age_new := age]
+ df[, age_new := max_NA(age_new), by = "patid"]
+ df[n_dose == 2, age_new := age_new +365]
+ df[, age:= age_new]
  
  res <- data.table()
  
@@ -755,7 +822,6 @@ cov_all[n_dose == 1, cov1y := 0.75*cov2y]
    }
  }
  
- 
  cov1 <- res[, list(region, vaccine, n_dose, bday1, cov1y)]
  cov1[, year := bday1]
  cov1[, bday1 := NULL]
@@ -780,54 +846,56 @@ cov_all[n_dose == 1, cov1y := 0.75*cov2y]
                     all = T)
  final_reg <- merge(final_reg, cov5, by = c("region", "vaccine", "n_dose", "year"), 
                     all = T)
- 
- write.table(final_reg, file =  paste0("Data/",
-                                       "Coverage_slowearlysecond_raw.csv"),
-             sep = ";", dec = ".", row.names = FALSE)
- 
+
  
  
  #extrapolating the missing data
- cov_new2 <- melt(final_reg, id = c("year", "region", "vaccine", "n_dose"))
+ cov_new3 <- melt(final_reg, id = c("year", "region", "vaccine", "n_dose"))
  
- cov_new2[variable == "cov1y", birth_year := year-1]
- cov_new2[variable == "cov2y", birth_year := year-2]
- cov_new2[variable == "cov3y", birth_year := year-3]
- cov_new2[variable == "cov4y", birth_year := year-4]
- cov_new2[variable == "cov5y", birth_year := year-5]
- cov_new2[variable == "cov1y", age := 1]
- cov_new2[variable == "cov2y", age := 2]
- cov_new2[variable == "cov3y", age := 3]
- cov_new2[variable == "cov4y", age := 4]
- cov_new2[variable == "cov5y", age := 5]
- cov_new2[, coverage := value]
+ cov_new3[variable == "cov1y", birth_year := year-1]
+ cov_new3[variable == "cov2y", birth_year := year-2]
+ cov_new3[variable == "cov3y", birth_year := year-3]
+ cov_new3[variable == "cov4y", birth_year := year-4]
+ cov_new3[variable == "cov5y", birth_year := year-5]
+ cov_new3[variable == "cov1y", age := 1]
+ cov_new3[variable == "cov2y", age := 2]
+ cov_new3[variable == "cov3y", age := 3]
+ cov_new3[variable == "cov4y", age := 4]
+ cov_new3[variable == "cov5y", age := 5]
+ cov_new3[, coverage := value]
  
  #reshaping
- cov_new2[variable == "cov1y", cov1y := coverage]
- cov_new2[variable == "cov2y", cov2y := coverage]
- cov_new2[variable == "cov3y", cov3y := coverage]
- cov_new2[variable == "cov4y", cov4y := coverage]
- cov_new2[variable == "cov5y", cov5y := coverage]
+ cov_new3[variable == "cov1y", cov1y := coverage]
+ cov_new3[variable == "cov2y", cov2y := coverage]
+ cov_new3[variable == "cov3y", cov3y := coverage]
+ cov_new3[variable == "cov4y", cov4y := coverage]
+ cov_new3[variable == "cov5y", cov5y := coverage]
  
- cov_new2[,cov1y := max_NA(cov1y), by= c("region", "n_dose", "birth_year")]
- cov_new2[,cov2y := max_NA(cov2y), by= c("region", "n_dose", "birth_year")]
- cov_new2[,cov3y := max_NA(cov3y), by= c("region", "n_dose", "birth_year")]
- cov_new2[,cov4y := max_NA(cov4y), by= c("region", "n_dose", "birth_year")]
- cov_new2[,cov5y := max_NA(cov5y), by= c("region", "n_dose", "birth_year")]
+ cov_new3[,cov1y := max_NA(cov1y), by= c("region", "n_dose", "birth_year")]
+ cov_new3[,cov2y := max_NA(cov2y), by= c("region", "n_dose", "birth_year")]
+ cov_new3[,cov3y := max_NA(cov3y), by= c("region", "n_dose", "birth_year")]
+ cov_new3[,cov4y := max_NA(cov4y), by= c("region", "n_dose", "birth_year")]
+ cov_new3[,cov5y := max_NA(cov5y), by= c("region", "n_dose", "birth_year")]
  
- cov_new2 <- cov_new2[, list(region, vaccine, n_dose, birth_year, cov1y, cov2y, cov3y, cov4y, cov5y)]
- cov_new2 <- unique(cov_new2, by = c("region", "vaccine", "n_dose", "birth_year", 
+ cov_new3 <- cov_new3[, list(region, vaccine, n_dose, birth_year, cov1y, cov2y, cov3y, cov4y, cov5y)]
+ cov_new3 <- unique(cov_new3, by = c("region", "vaccine", "n_dose", "birth_year", 
                                      "cov1y", "cov2y", "cov3y", "cov4y", "cov5y"))
  
- cov_new2 <- cov_new2[birth_year >=2006 & birth_year <= 2014]
+ #assumption No1 - coverage of first dose plateaus at the age of two
+ # cov_new3[n_dose == 1 & (cov3y >cov2y), cov3y :=  cov2y]
+ # cov_new3[n_dose == 1 & (cov4y >cov3y), cov4y :=  cov3y]
+ # cov_new3[n_dose == 1 & (cov5y >cov4y), cov5y :=  cov4y]
+ cov_new3 <- cov_new3[birth_year >=2006 & birth_year <= 2014]
  
- colnames(cov_new2)
  #add the first dose coverage before 2005
  tmp1 <- cov_new[(n_dose == 1 & birth_year < 2006) | (n_dose == 1 & birth_year > 2014), list(region, vaccine, n_dose, birth_year, cov1y, cov2y, cov3y, cov4y, cov5y)]
+ # tmp1[n_dose == 1 & (cov3y >cov2y), cov3y :=  cov2y]
+ # tmp1[n_dose == 1 & (cov4y >cov3y), cov4y :=  cov3y]
+ # tmp1[n_dose == 1 & (cov5y >cov4y), cov5y :=  cov4y]
  
  #adding additional second dose coverage
  tmp2 <- cov_new[(n_dose == 2 & birth_year <= 2006) | (n_dose == 2 & birth_year >= 2014), list(region, vaccine, n_dose, birth_year, cov1y, cov2y, cov3y, cov4y, cov5y)]
- tmp2 <- merge(tmp2, cov_new2[(birth_year == 2006 | birth_year == 2014)& n_dose == 2], by = c("region", "birth_year"), all.x = T)
+ tmp2 <- merge(tmp2, cov_new3[(birth_year == 2006 | birth_year == 2014)& n_dose == 2], by = c("region", "birth_year"), all.x = T)
  tmp2[birth_year== 2006, cor_2006_5 := cov5y.y/cov5y.x]
  tmp2[birth_year== 2006, cor_2006_4 := cov4y.y/cov4y.x]
  tmp2[birth_year== 2006, cor_2006_3 := cov3y.y/cov3y.x]
@@ -866,7 +934,7 @@ cov_all[n_dose == 1, cov1y := 0.75*cov2y]
  tmp2 <- tmp2[birth_year < 2006 | birth_year >2014, list(region, vaccine, n_dose, birth_year, cov1y, cov2y, cov3y, cov4y, cov5y)]
  
  #join all the data sets together
- cov_all <- rbind(cov_new2, tmp1, tmp2)
+ cov_all <- rbind(cov_new3, tmp1, tmp2)
  #adjusting for vaccines given at 12 months and 18 months
  cov_all[n_dose == 2, cov1y := 0]
  cov_all[n_dose == 2, cov2y := 0.75*cov3y]
@@ -892,19 +960,18 @@ cov_all[n_dose == 1, cov1y := 0.75*cov2y]
  cov5[, birth_year := NULL]
  
  
- cov_extrapol2 <- merge(cov1, cov2, by = c("region", "n_dose", "year"), all = T)
- cov_extrapol2 <- merge(cov_extrapol2, cov3, by = c("region","n_dose", "year"), all = T)
- cov_extrapol2 <- merge(cov_extrapol2, cov4, by = c("region", "n_dose", "year"), all = T)
- cov_extrapol2 <- merge(cov_extrapol2, cov5, by = c("region", "n_dose", "year"), all = T)
+ cov_extrapol3 <- merge(cov1, cov2, by = c("region", "n_dose", "year"), all = T)
+ cov_extrapol3 <- merge(cov_extrapol3, cov3, by = c("region","n_dose", "year"), all = T)
+ cov_extrapol3 <- merge(cov_extrapol3, cov4, by = c("region", "n_dose", "year"), all = T)
+ cov_extrapol3 <- merge(cov_extrapol3, cov5, by = c("region", "n_dose", "year"), all = T)
  
- cov_extrapol2 <- cov_extrapol2[year >= 2005 & year <=2019]
- cov_extrapol2[n_dose == 2 & year == 2019, cov1y := 0]
- cov_extrapol2[, vaccine := "MMR"]
+ cov_extrapol3 <- cov_extrapol3[year >= 2005 & year <=2019]
+ cov_extrapol3[n_dose == 2 & year == 2019, cov1y := 0]
+ cov_extrapol3[, vaccine := "MMR"]
  
- write.table(cov_extrapol2, file =  paste0("Data/",
-                                           "Coverage_earlysecond.csv"),
+ write.table(cov_extrapol3, file =  paste0("Data/",
+                                           "Coverage_reg_year_earlytimely2nd_extrapol.csv"),
              sep = ";", dec = ".", row.names = FALSE)
- 
  
  
  

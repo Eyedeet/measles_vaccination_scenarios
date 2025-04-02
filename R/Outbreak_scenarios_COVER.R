@@ -202,9 +202,9 @@ med_ref <- as.numeric(summary_table$Median[12])
 summary_table[, Median := as.numeric(Median)]
 summary_table[, `1st Qu.` := as.numeric(`1st Qu.`)]
 summary_table[, `3rd Qu.` := as.numeric(`3rd Qu.`)]
-summary_table[, diff_per := paste0(round(100-((Median/med_ref)*100),digits = 2),
-                                   " (" ,round(100-((`3rd Qu.`/med_ref)*100), digits = 2),
-                                   "; ",round(100-((`1st Qu.`/med_ref)*100), digits = 2) , ")")]
+summary_table[, diff_per := paste0(round(  (((med_ref-Median)/med_ref)*100), digits = 2),
+                                   " (" , round((((med_ref-`3rd Qu.`)/med_ref)*100), digits = 2),
+                                   "; ", round((((med_ref-`1st Qu.`)/med_ref)*100), digits = 2),")")]
 
 write.csv2(summary_table, file = "Output/Summary_table_COVER.csv", dec = ".")
 

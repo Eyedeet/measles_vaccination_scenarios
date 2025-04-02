@@ -109,6 +109,12 @@ saveRDS(early_second, file="Output/models/early_second.rda")
 rm(early_second)
 gc()
 
+early_speedy <- create_scenario(scenario_name = "early speedy")
+saveRDS(early_speedy, file="Output/models/early_second_speedy.rda")
+rm(early_speedy)
+gc()
+
+
 
 MMR2_at_5 <- create_scenario(scenario_name = "MMR2_at5")
 saveRDS(MMR2_at_5, file="Output/models/MMR2_at_5.rda")
@@ -211,17 +217,17 @@ summary_table <- cbind(c("MMR1 + 0.25%", "MMR1 +0.5","MMR1 +1",
                          "MMR2 +0.5","MMR2 +1",
                          "MMR2 + 3",
                          "early +0.25", "early +0.5","early +1",
-                         "MMR2 -3","MMR2 -5","early second","early MMR2 like MMR1",
+                         "MMR2 -3","MMR2 -5","early second", "early speedy", "early MMR2 like MMR1",
                          "MMR2 at 5", "reference"), summary_table)
 summary_table <- as.data.table(summary_table)
 summary_table[, result := paste0(`Median`, " (", `1st Qu.`, "; ", `3rd Qu.`, ")")]
-med_ref <- as.numeric(summary_table$Median[15])
+med_ref <- as.numeric(summary_table$Median[16])
 summary_table[, Median := as.numeric(Median)]
 summary_table[, `1st Qu.` := as.numeric(`1st Qu.`)]
 summary_table[, `3rd Qu.` := as.numeric(`3rd Qu.`)]
-summary_table[, diff_per := paste0(round(100-((Median/med_ref)*100),digits = 2),
-                                   " (" ,round(100-((`3rd Qu.`/med_ref)*100), digits = 2),
-                                   "; ", round(100-((`1st Qu.`/med_ref)*100), digits = 2), ")")]
+summary_table[, diff_per := paste0(round(  (((med_ref-Median)/med_ref)*100), digits = 2),
+                                   " (" , round((((med_ref-`3rd Qu.`)/med_ref)*100), digits = 2),
+                                   "; ", round((((med_ref-`1st Qu.`)/med_ref)*100), digits = 2),")")]
 
 write.csv2(summary_table, file = "Output/Summary_table_CPRD.csv")
 
