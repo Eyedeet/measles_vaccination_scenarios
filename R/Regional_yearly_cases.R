@@ -59,13 +59,13 @@ colnames(res) <- c("region", "median",  "lb", "ub","IQR_ref" , "region" ,"median
                    "lb.1",    "ub.1" , "IQR_early", "region", "median.2" ,  
                    "lb.2" ,  "ub.2" , "IQR_MMR1" )
 
+res[, diff_MMR2 := paste0(round((((median-median.1)/median)*100), digits = 2),
+                                   " (" , round((((median-ub.1)/median)*100), digits = 2),
+                                   "; ", round((((median-lb.1)/median)*100), digits = 2),")")]
+res[, diff_MMR1 := paste0(round((((median-median.2)/median)*100), digits = 2),
+                          " (" , round((((median-ub.2)/median)*100), digits = 2),
+                          "; ", round((((median-lb.2)/median)*100), digits = 2),")")]
 
-res[, diff_MMR2 := paste0(round(100-((median.1/median)*100),digits = 2),
-                                   " (" ,round(100-((ub.1/median)*100), digits = 2),
-                                   "; ", round(100-((lb.1/median)*100), digits = 2), ")")]
-res[, diff_MMR1 := paste0(round(100-((median.2/median)*100),digits = 2),
-                          " (" ,round(100-((ub.2/median)*100), digits = 2),
-                          "; ", round(100-((lb.2/median)*100), digits = 2), ")")]
 res <- res[, c("region", "IQR_ref" ,  "IQR_early", "IQR_MMR1",
                                    "diff_MMR2", "diff_MMR1")]
 
@@ -85,12 +85,12 @@ colnames(res2) <- c("year", "median",  "lb", "ub","IQR_ref" , "year" ,"median.1"
                    "lb.1",    "ub.1" , "IQR_early", "year", "median.2" ,  
                    "lb.2" ,  "ub.2" , "IQR_MMR1" )
 
-res2[, diff_MMR2 := paste0(round(100-((median.1/median)*100),digits = 2),
-                          " (" ,round(100-((ub.1/median)*100), digits = 2),
-                          "; ", round(100-((lb.1/median)*100), digits = 2), ")")]
-res2[, diff_MMR1 := paste0(round(100-((median.2/median)*100),digits = 2),
-                          " (" ,round(100-((ub.2/median)*100), digits = 2),
-                          "; ", round(100-((lb.2/median)*100), digits = 2), ")")]
+res2[, diff_MMR2 := paste0(round((((median-median.1)/median)*100), digits = 2),
+                          " (" , round((((median-ub.1)/median)*100), digits = 2),
+                          "; ", round((((median-lb.1)/median)*100), digits = 2),")")]
+res2[, diff_MMR1 := paste0(round((((median-median.2)/median)*100), digits = 2),
+                          " (" , round((((median-ub.2)/median)*100), digits = 2),
+                          "; ", round((((median-lb.2)/median)*100), digits = 2),")")]
 res2 <- res2[, c("year", "IQR_ref" ,  "IQR_early", "IQR_MMR1",
               "diff_MMR2","diff_MMR1" )]
 
@@ -111,12 +111,13 @@ colnames(res) <- c("region", "median",  "lb", "ub","IQR_ref" , "region" ,"median
                    "lb.2" ,  "ub.2" , "IQR_MMR1" )
 
 
-res[, diff_MMR2 := paste0(round(100-((median.1/median)*100),digits = 2),
-                          " (" ,round(100-((ub.1/median)*100), digits = 2),
-                          "; ", round(100-((lb.1/median)*100), digits = 2), ")")]
-res[, diff_MMR1 := paste0(round(100-((median.2/median)*100),digits = 2),
-                          " (" ,round(100-((ub.2/median)*100), digits = 2),
-                          "; ", round(100-((lb.2/median)*100), digits = 2), ")")]
+res[, diff_MMR2 := paste0(round((((median-median.1)/median)*100), digits = 2),
+                          " (" , round((((median-ub.1)/median)*100), digits = 2),
+                          "; ", round((((median-lb.1)/median)*100), digits = 2),")")]
+res[, diff_MMR1 := paste0(round((((median-median.2)/median)*100), digits = 2),
+                          " (" , round((((median-ub.2)/median)*100), digits = 2),
+                          "; ", round((((median-lb.2)/median)*100), digits = 2),")")]
+
 res <- res[, c("region", "IQR_ref" ,  "IQR_early", "IQR_MMR1",
                "diff_MMR2", "diff_MMR1")]
 
@@ -136,119 +137,68 @@ colnames(res2) <- c("year", "median",  "lb", "ub","IQR_ref" , "year" ,"median.1"
                     "lb.1",    "ub.1" , "IQR_early", "year", "median.2" ,  
                     "lb.2" ,  "ub.2" , "IQR_MMR1" )
 
-res2[, diff_MMR2 := paste0(round(100-((median.1/median)*100),digits = 2),
-                           " (" ,round(100-((ub.1/median)*100), digits = 2),
-                           "; ", round(100-((lb.1/median)*100), digits = 2), ")")]
-res2[, diff_MMR1 := paste0(round(100-((median.2/median)*100),digits = 2),
-                           " (" ,round(100-((ub.2/median)*100), digits = 2),
-                           "; ", round(100-((lb.2/median)*100), digits = 2), ")")]
+res2[, diff_MMR2 := paste0(round((((median-median.1)/median)*100), digits = 2),
+                          " (" , round((((median-ub.1)/median)*100), digits = 2),
+                          "; ", round((((median-lb.1)/median)*100), digits = 2),")")]
+res2[, diff_MMR1 := paste0(round((((median-median.2)/median)*100), digits = 2),
+                          " (" , round((((median-ub.2)/median)*100), digits = 2),
+                          "; ", round((((median-lb.2)/median)*100), digits = 2),")")]
 res2 <- res2[, c("year", "IQR_ref" ,  "IQR_early", "IQR_MMR1",
                  "diff_MMR2","diff_MMR1" )]
 
 write.csv2(res2, file = "Output/yearly_cases_cover.csv")
 
 ################################################################################
-#waning from age 5
+#waning from age 5&3 
 
 reference <-regional_cases("reference_waningCPRD.rda")
 reference[, IQR_ref := paste0(median, " (", lb, "; ", ub, ")")]
 earlyMMR2 <-regional_cases("early_second_waningCPRD.rda")
 earlyMMR2[, IQR_early := paste0(median, " (", lb, "; ", ub, ")")]
-MMR1plu05 <- regional_cases("D1_05_waningCPRD.rda")
-MMR1plu05[, IQR_MMR1 := paste0(median, " (", lb, "; ", ub, ")")]
+earlyMMR2_3 <-regional_cases("early_second_waning3CPRD.rda")
+earlyMMR2_3[, IQR_early := paste0(median, " (", lb, "; ", ub, ")")]
 
-res <- cbind(reference, earlyMMR2, MMR1plu05)
+
+
+res <- cbind(reference, earlyMMR2, earlyMMR2_3)
 colnames(res) <- c("region", "median",  "lb", "ub","IQR_ref" , "region" ,"median.1" ,
-                   "lb.1",    "ub.1" , "IQR_early", "region", "median.2" ,  
-                   "lb.2" ,  "ub.2" , "IQR_MMR1" )
+                   "lb.1",    "ub.1" , "IQR_waning5", "region", "median.2" ,  
+                   "lb.2" ,  "ub.2" , "IQR_waning3" )
 
 
-res[, diff_MMR2 := paste0(round(100-((median.1/median)*100),digits = 2),
-                          " (" ,round(100-((ub.1/median)*100), digits = 2),
-                          "; ", round(100-((lb.1/median)*100), digits = 2), ")")]
-res[, diff_MMR1 := paste0(round(100-((median.2/median)*100),digits = 2),
-                          " (" ,round(100-((ub.2/median)*100), digits = 2),
-                          "; ", round(100-((lb.2/median)*100), digits = 2), ")")]
-res <- res[, c("region", "IQR_ref" ,  "IQR_early", "IQR_MMR1",
-               "diff_MMR2", "diff_MMR1")]
+res[, diff_MMR2_5 := paste0(round((((median-median.1)/median)*100), digits = 2),
+                           " (" , round((((median-ub.1)/median)*100), digits = 2),
+                           "; ", round((((median-lb.1)/median)*100), digits = 2),")")]
+res[, diff_MMR2_3 := paste0(round((((median-median.2)/median)*100), digits = 2),
+                           " (" , round((((median-ub.2)/median)*100), digits = 2),
+                           "; ", round((((median-lb.2)/median)*100), digits = 2),")")]
+res <- res[, c("region", "IQR_ref" ,  "IQR_waning5", "IQR_waning3",
+               "diff_MMR2_5", "diff_MMR2_3")]
 
 
-write.csv2(res, file = "Output/regional_cases_waning5.csv")
+write.csv2(res, file = "Output/regional_cases_waning.csv")
 
 #yearly cases by scenario
 reference <-yearly_cases("reference_waningCPRD.rda")
 reference[, IQR_ref := paste0(median, " (", lb, "; ", ub, ")")]
 earlyMMR2 <-yearly_cases("early_second_waningCPRD.rda")
 earlyMMR2[, IQR_early := paste0(median, " (", lb, "; ", ub, ")")]
-MMR1plu05 <- yearly_cases("D1_05_waningCPRD.rda")
-MMR1plu05[, IQR_MMR1 := paste0(median, " (", lb, "; " , ub, ")")]
+earlyMMR2_3 <-yearly_cases("early_second_waning3CPRD.rda")
+earlyMMR2_3[, IQR_early := paste0(median, " (", lb, "; ", ub, ")")]
 
-res2 <- cbind(reference, earlyMMR2, MMR1plu05)
+res2 <- cbind(reference, earlyMMR2, earlyMMR2_3)
 colnames(res2) <- c("year", "median",  "lb", "ub","IQR_ref" , "year" ,"median.1" ,
-                    "lb.1",    "ub.1" , "IQR_early", "year", "median.2" ,  
-                    "lb.2" ,  "ub.2" , "IQR_MMR1" )
+                    "lb.1",    "ub.1" , "IQR_waning5", "year", "median.2" ,  
+                    "lb.2" ,  "ub.2" , "IQR_waning3" )
 
-res2[, diff_MMR2 := paste0(round(100-((median.1/median)*100),digits = 2),
-                           " (" ,round(100-((ub.1/median)*100), digits = 2),
-                           "; ", round(100-((lb.1/median)*100), digits = 2), ")")]
-res2[, diff_MMR1 := paste0(round(100-((median.2/median)*100),digits = 2),
-                           " (" ,round(100-((ub.2/median)*100), digits = 2),
-                           "; ", round(100-((lb.2/median)*100), digits = 2), ")")]
-res2 <- res2[, c("year", "IQR_ref" ,  "IQR_early", "IQR_MMR1",
-                 "diff_MMR2","diff_MMR1" )]
+res2[, diff_MMR2_5 := paste0(round((((median-median.1)/median)*100), digits = 2),
+                          " (" , round((((median-ub.1)/median)*100), digits = 2),
+                          "; ", round((((median-lb.1)/median)*100), digits = 2),")")]
+res2[, diff_MMR2_3 := paste0(round((((median-median.2)/median)*100), digits = 2),
+                          " (" , round((((median-ub.2)/median)*100), digits = 2),
+                          "; ", round((((median-lb.2)/median)*100), digits = 2),")")]
+res2 <- res2[, c("year", "IQR_ref" ,  "IQR_waning5", "IQR_waning3",
+                 "diff_MMR2_5","diff_MMR2_3" )]
 
 write.csv2(res2, file = "Output/yearly_cases_waning5.csv")
-
-###############################################################################
-#waning from age 3
-
-reference <-regional_cases("reference_waning3CPRD.rda")
-reference[, IQR_ref := paste0(median, " (", lb, "; ", ub, ")")]
-earlyMMR2 <-regional_cases("early_second_waning3CPRD.rda")
-earlyMMR2[, IQR_early := paste0(median, " (", lb, "; ", ub, ")")]
-MMR1plu05 <- regional_cases("D1_05_waning3CPRD.rda")
-MMR1plu05[, IQR_MMR1 := paste0(median, " (", lb, "; ", ub, ")")]
-
-res <- cbind(reference, earlyMMR2, MMR1plu05)
-colnames(res) <- c("region", "median",  "lb", "ub","IQR_ref" , "region" ,"median.1" ,
-                   "lb.1",    "ub.1" , "IQR_early", "region", "median.2" ,  
-                   "lb.2" ,  "ub.2" , "IQR_MMR1" )
-
-
-res[, diff_MMR2 := paste0(round(100-((median.1/median)*100),digits = 2),
-                          " (" ,round(100-((ub.1/median)*100), digits = 2),
-                          "; ", round(100-((lb.1/median)*100), digits = 2), ")")]
-res[, diff_MMR1 := paste0(round(100-((median.2/median)*100),digits = 2),
-                          " (" ,round(100-((ub.2/median)*100), digits = 2),
-                          "; ", round(100-((lb.2/median)*100), digits = 2), ")")]
-res <- res[, c("region", "IQR_ref" ,  "IQR_early", "IQR_MMR1",
-               "diff_MMR2", "diff_MMR1")]
-
-
-write.csv2(res, file = "Output/regional_cases_waning3.csv")
-
-#yearly cases by scenario
-reference <-yearly_cases("reference_waning3CPRD.rda")
-reference[, IQR_ref := paste0(median, " (", lb, "; ", ub, ")")]
-earlyMMR2 <-yearly_cases("early_second_waning3CPRD.rda")
-earlyMMR2[, IQR_early := paste0(median, " (", lb, "; ", ub, ")")]
-MMR1plu05 <- yearly_cases("D1_05_waning3CPRD.rda")
-MMR1plu05[, IQR_MMR1 := paste0(median, " (", lb, "; " , ub, ")")]
-
-res2 <- cbind(reference, earlyMMR2, MMR1plu05)
-colnames(res2) <- c("year", "median",  "lb", "ub","IQR_ref" , "year" ,"median.1" ,
-                    "lb.1",    "ub.1" , "IQR_early", "year", "median.2" ,  
-                    "lb.2" ,  "ub.2" , "IQR_MMR1" )
-
-res2[, diff_MMR2 := paste0(round(100-((median.1/median)*100),digits = 2),
-                           " (" ,round(100-((ub.1/median)*100), digits = 2),
-                           "; ", round(100-((lb.1/median)*100), digits = 2), ")")]
-res2[, diff_MMR1 := paste0(round(100-((median.2/median)*100),digits = 2),
-                           " (" ,round(100-((ub.2/median)*100), digits = 2),
-                           "; ", round(100-((lb.2/median)*100), digits = 2), ")")]
-res2 <- res2[, c("year", "IQR_ref" ,  "IQR_early", "IQR_MMR1",
-                 "diff_MMR2","diff_MMR1" )]
-
-write.csv2(res2, file = "Output/yearly_cases_waning3.csv")
-
 

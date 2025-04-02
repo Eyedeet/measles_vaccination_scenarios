@@ -79,9 +79,8 @@ All files for the vaccination scenarios are saved in the `Output/models` folder,
 
 The output folder contains four subfolders (one for each scenario):
 * `Output/cprd_degree/`: Files and figures using CPRD coverage data, and estimating the spatial kernel.
-* `Output/cprd_degree_sec/`: Files and figures using CPRD coverage data, estimating the spatial kernel, with a risk of leak from vaccinated compartments constant with age.
+ constant with age.
 * `Output/cover_degree/`: Files and figures using COVER coverage data, and estimating the spatial kernel.
-* `Output/cprd_fixed/`: Files and figures using CPRD coverage data, with a fixed spatial kernel.
 
 Each folder contains three files with the parameter estimates and posterior distribution, computed when fitting the model to measles case data reported in England between 2010 and 2019:
 * `no.rds`: model without waning.
@@ -89,10 +88,6 @@ Each folder contains three files with the parameter estimates and posterior dist
 
 
 Each file is a list, the parameter estimates are contained in the element `pars` of the list. The log-posterior, log-prior, and log-likelihood scores and contained in the element `probabilities` of the list.
-
-Each folder also contains two files with the simulation set generated from the parameter estimates. 
-* `sim_no.rds`: simulation from the model without waning.
-* `sim_since_vax.rds`: simulation from the model with waning by age.
 
 
 
