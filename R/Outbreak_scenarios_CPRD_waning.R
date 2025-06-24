@@ -227,5 +227,3 @@ summary_table[, diff_per := paste0(round(  (((med_ref-Median)/med_ref)*100), dig
 write.csv2(summary_table, file = "Output/Summary_table_CPRD_waning.csv")
 
 
-#comparing the scenarios in graphs
-#imrproving coverage

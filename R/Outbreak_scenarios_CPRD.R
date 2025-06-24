@@ -10,7 +10,7 @@ source("R/function_figures.R")
 source("R/function_vaccination_data.R")
 
 ## Import libraries 
-#devtools::install_github("alxsrobert/seirvodin")
+devtools::install_github("alxsrobert/seirvodin")
 library(seirvodin)
 library(dplyr)
 library(socialmixr)
@@ -109,12 +109,6 @@ saveRDS(early_second, file="Output/models/early_second.rda")
 rm(early_second)
 gc()
 
-early_speedy <- create_scenario(scenario_name = "early speedy")
-saveRDS(early_speedy, file="Output/models/early_second_speedy.rda")
-rm(early_speedy)
-gc()
-
-
 
 MMR2_at_5 <- create_scenario(scenario_name = "MMR2_at5")
 saveRDS(MMR2_at_5, file="Output/models/MMR2_at_5.rda")
@@ -188,6 +182,10 @@ rm(D2_minus5)
 gc()
 
 
+early_second2015 <- create_scenario(scenario_name = "CPRD_earlyMMR2_2015")
+saveRDS(early_second2015, file="Output/models/early_second_2015.rda")
+rm(early_second2015)
+gc()
 
 #---summary table for results
 all_models <- list.files("Output/models/")
@@ -217,8 +215,9 @@ summary_table <- cbind(c("MMR1 + 0.25%", "MMR1 +0.5","MMR1 +1",
                          "MMR2 +0.5","MMR2 +1",
                          "MMR2 + 3",
                          "early +0.25", "early +0.5","early +1",
-                         "MMR2 -3","MMR2 -5","early second", "early speedy", "early MMR2 like MMR1",
-                         "MMR2 at 5", "reference"), summary_table)
+                         "MMR2 -3","MMR2 -5","early second", "early second 2015",
+                         "early MMR2 like MMR1",
+                         "MMR2 at 5", "reference", "reference 2015"), summary_table)
 summary_table <- as.data.table(summary_table)
 summary_table[, result := paste0(`Median`, " (", `1st Qu.`, "; ", `3rd Qu.`, ")")]
 med_ref <- as.numeric(summary_table$Median[16])

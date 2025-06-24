@@ -1,3 +1,4 @@
+library(data.table)
 #table of regional cases by scenario
 
 regional_cases <- function(output){

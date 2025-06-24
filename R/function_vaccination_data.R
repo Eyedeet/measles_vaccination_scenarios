@@ -20,7 +20,7 @@ import_pop_data <- function(year_start){
   N_2019 <- t(dt_pop_select[dt_pop_select$Year == 2019, grep("age", colnames(dt_pop_select))])
   
   colnames(N_2006) <- colnames(N_2013) <- colnames(N_2019) <- unique(dt_pop_select$Name)
-  if(year_start == 2006 || year_start == 2010) N <- N_2006 else stop("Define N")
+  if(year_start == 2006 || year_start == 2010)N <- N_2006 else stop("Define N")
   return(N)
 }
 
@@ -266,6 +266,14 @@ import_ehr_vaccine <- function(vax, scenario){
       as.data.table()
     
   }
+  #sensitivity analysis startinf in 2015
+  else if(vax == "cprd" & scenario == "CPRD_earlyMMR2_2015"){
+    cov_per_year <- read.csv2("Data/EarlyMMR2_2015.csv",
+                              sep = ";") %>% 
+      as.data.table()
+    
+  }
+  
   
 
   ## Formatting changes
@@ -299,8 +307,31 @@ import_ehr_vaccine <- function(vax, scenario){
   ## Coverage at 1 is 75% of coverage at 2
   dt_vacc[age == 1 & dose == 1, coverage := dt_vacc[age == 2 & dose == 1, coverage] * .75]
   ## Second dose coverage
-  dt_vacc[age == 3 & dose == 2, coverage := dt_vacc[age == 4 & dose == 2, coverage] * .5]
+  if(!scenario %in% c("early slow", "early speedy", "MMR2_at5", "MMR2_as_MMR1",
+                      "D2_earlyplus025", "D2_earlyplus05", "D2_earlyplus1",
+                      "earlyminus3", "earlyminus5", "year_2015")){
+    dt_vacc[age == 3 & dose == 2, coverage := dt_vacc[age == 4 & dose == 2, coverage] * .5]
+  }
+
+  dt_vacc[age == 1 & dose == 2, coverage := 0]
   
+  ### Avoid individuals going from S to V2 within 1 year
+  ## Set id
+  dt_vacc[, id := paste(year, tolower(region), dose, age, sep = "_")]
+  setkey(dt_vacc, id)
+  ## Compute 1st dose coverage at 1, for entries where age = 2 and dose = 2
+  dt_vacc[age == 2 & dose == 2, 
+          cov1 := dt_vacc[paste(dt_vacc[age == 2 & dose == 2, year - 1],
+                                dt_vacc[age == 2 & dose == 2, tolower(region)],
+                                1, 1, sep = "_"), coverage]
+  ]
+  ## If 1st dose coverage at 1 is below 2nd dose coverage at 2, set 2nd dose 
+  ## coverage to 1st dose coverage at 1
+  dt_vacc[cov1 < coverage, coverage := cov1]
+  ## Remove columns cov1 and id
+  dt_vacc[, cov1 := NULL]
+  dt_vacc[, id := NULL]
+
   dt_vacc[region == "EAST OF ENGLAND", region := "EAST"]
   dt_vacc <- dt_vacc[yob > 2004,]
   

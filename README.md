@@ -14,16 +14,17 @@ The following R packages are required to run the code:
 * odin.dust
 * mcstate
 * tidyr
+* rlang
+* arrow
 * ggplot2
 * data.table
-* excel.link
-* patchwork
+* cowplot
 ```
 and can be installed in R by running:
 ```R
-install.packages(c("dplyr", "socialmixr", "tidyr", "ggplot2", "data.table", "excel.link", "patchwork"))
-install.packages(c("mcstate", "odin.dust"), repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
-devtools::install_github("alxsrobert/seirvodin")
+install.packages(c('dplyr', 'socialmixr', 'tidyr','rlang', 'arrow',   'ggplot2', 'data.table', 'cowplot'))
+install.packages(c('mcstate', 'odin.dust'), repos = c('https://mrc-ide.r-universe.dev', 'https://cloud.r-project.org'))
+devtools::install_github('alxsrobert/seirvodin')
 ```
 
 ## Running the code
@@ -39,8 +40,8 @@ The code contains scripts to
 Firstly, to generate the different vaccination scenarios, run the following code:
 
 ```R
-source(“R/Measles_coverage_scenarios_creation.R”)
-source(“R/Measles_coverage_scenarios_creation_NHS.R”)
+source('R/Measles_coverage_scenarios_creation.R')
+source('R/Measles_coverage_scenarios_creation_NHS.R')
 ```
 The first scripts generate different vaccination scenarios using data from the Clinical Practice Research Datalink Aurum (May 2022 build) which is a population-representative electronic health record dataset which is not publicly avaiable. The methods to measure vaccine uptake in electronic health records have been previously validated (https://onlinelibrary.wiley.com/doi/10.1002/pds.5848) and a description of childhood immunisation coverage in this dataset can be found here: https://www.sciencedirect.com/science/article/pii/S0264410X2300926X?via%3Dihub.
 For a sensitivity analysis, we generated the same vaccination scenarios using the publicly aviable coverage data published by NHS England (https://www.england.nhs.uk/statistics/statistical-work-areas/child-immunisation/)
@@ -49,27 +50,27 @@ For a sensitivity analysis, we generated the same vaccination scenarios using th
 To generate stochastic outbreak simulations for each scenario based on the parameter estimates, run the following command:
 ```R
 #main results
-source(“R/Outbreak_sencarios_CPRD.R”)
+source('R/Outbreak_sencarios_CPRD.R')
 
 #sensitivity analyses
 #waning from the age of 5 since vaccination
-source(“R/Outbreak_sencarios_CPRD_waning.R”)
+source('R/Outbreak_sencarios_CPRD_waning.R')
 #waning from the age of 3 since vaccination
-source(“R/Outbreak_sencarios_CPRD_waning_from3.R”)
+source('R/Outbreak_scenarios_CPRD_waning_from3.R')
 #COVER data used instead of CPRD data
-source(“R/Outbreak_sencarios_COVER.R”)
+source('R/Outbreak_sencarios_COVER.R')
 
 ```
 The runtime is around 34min per scenario. To reduce the runtime change the number of samples (parameter `n_samples`) in line 44 line of `R/Outbreak_sencarios_CPRD.R`. The waning and vax parameter in the create_scenario() need to be specified according to underlying assumption of waning (no = no waning, since_vax = waning from the age of five since vaccination, early = waning from the age of 3 since vaccination) and the vaccination dataset used (cprd = Clinical Research Practice Datalink, cover = COVER). The files with the parameter estimates based on the fitted model are available on the repository and were generated from parameter estimates using the actual case data.
-The overall runtime does not exceed 37 hours for running 16 scenarios per script on a standard laptop with a 3.0 GHz processor and 128 GB RAM. 
+The overall runtime does not exceed 37 hours for running 16 scenarios per script on a virtual machine with a 32-Core 3.0 GHz processor and 128 GB RAM. 
 
 Finally, to generate the figures describing simulations for each scenario, run the following command:
 ```R
 #defining the function to create the figures
-source(“R/function_figures.R”)
+source('R/function_figures.R')
 
 #creating the actualy figures
-source(“R/all_figures.R”)
+source('R/all_figures.R')
 
 ```
 All files for the vaccination scenarios are saved in the `Output/models` folder, and all figures are saved in the `Digures` of the folder.

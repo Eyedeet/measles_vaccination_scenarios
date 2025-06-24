@@ -1187,3 +1187,22 @@ write.table(minus_50, file =  paste0("Data/",
 write.table(minus_all, file =  paste0("Data/",
                                          "Cove2zero.csv"),
             sep = ";", dec = ".", row.names = FALSE) 
+
+###############################################################################
+#scenario for early MMR2 from 2015 onwards
+#add extreme experimental scenarios
+tmp  <- data.table(read.csv2(file =  paste0("Data/",
+                                            "Coverage_earlysecond.csv")),
+                   sep = ";", dec = ".")
+ref <- data.table(read.csv2(paste0("Data/",
+                                  "Coverage_reg_year_orig_extrapol.csv"),
+                           sep = ";", dec = "."))
+
+tmp<- tmp[year >2014]
+tmp <- tmp[, -c("sep", "dec")]
+ref <- ref[year <=2014]
+
+dt <- rbind(tmp, ref)
+write.table(dt, file =  paste0("Data/",
+                                      "EarlyMMR2_2015.csv"),
+            sep = ";", dec = ".", row.names = FALSE) 

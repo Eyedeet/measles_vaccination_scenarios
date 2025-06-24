@@ -1,5 +1,74 @@
 ####Generating all plots
 source("R/function_figures.R")
+library(cowplot)
+library(tidyverse)
+library(data.table)
+
+
+###############################################################################
+#Figure 3 - original cases against reference scenario
+cases <- data.table(year = c(2010:2019),
+                    cases_surv = c(374,  1064,  1897,  1447,  104,   92,   522,   248,   964,   792))
+
+ref <- readRDS(paste0("Output/models/reference.rda"))
+
+rows_new_cases <- rownames(ref)[grep("new_I", rownames(ref))]
+## Sum number of new infected per day
+new_cases <- cbind.data.frame(reg = "National", iter = seq_len(ncol(ref)), 
+                              ref[rows_new_cases,,] %>% colSums())
+time <- time <- seq(2010, 2019, 1) 
+colnames(new_cases) <- c("reg", "iter", as.character(time))
+
+## Change new_cases to long format (to then use ggplot) 
+long_new_cases <- pivot_longer(as.data.frame(new_cases), 
+                               cols = c(as.character(time)), 
+                               names_to = "time",
+                               values_to = "new_cases")
+long_new_cases <- as.data.table(long_new_cases)
+long_new_cases$time <- long_new_cases$time %>% as.numeric 
+
+## Aggregate by region / iteration / year
+cases_per_year <- long_new_cases[, lapply(.SD, sum), by = .(iter, time, reg)]
+
+#average number of cases by iteration
+tmp1 <- data.table()
+for(i in 2010:2019){
+  
+  vec <- quantile(cases_per_year[time == i, new_cases], probs = c(0.025, 0.125, 0.25, 0.5, 0.75, 0.875, 0.975))
+  new_row <- data.table(year = i, lb_95 = vec[[1]], lb_75= vec[[2]], lb_50 = vec[[3]], 
+                        median = vec[[4]], ub_50 = vec[[5]], ub_75 = vec[[6]], ub_95 = vec[[7]])
+  tmp1 <- rbind(tmp1, new_row)
+}
+
+tmp<- merge(tmp1, cases, by = "year")
+
+plot <- tmp %>%
+  ggplot(aes(x = year))+
+  geom_line(aes(y = median), color = "#2c5985" )+
+    geom_point(aes(y = cases_surv), color = "darkgrey", size = 3)+
+  scale_color_manual(values = c("#2c5985"))+ 
+  geom_ribbon (aes(ymin = lb_50, ymax = ub_50),  alpha = 0.5, linetype = 0, fill = "#2c5985")+
+  geom_ribbon (aes(ymin = lb_95, ymax = ub_95),  alpha = 0.2, linetype = 0, fill = "#2c5985")+
+  scale_fill_manual(values = c("#2c5985"))+
+  scale_x_continuous(name = "Year", breaks = c(2011, 2013, 2015, 2017, 2019))+
+  scale_y_continuous(name = "N measles cases", breaks = seq(0, 4000, by = 500), limits = c(0, 4000))+
+  ylab("N measles cases")+
+  xlab("Year")+
+  theme_classic()+
+  theme(legend.position="bottom",
+        axis.text.x = element_text(color = "grey20", size = 20, angle = 45, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "grey20", size = 20, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "grey20", size = 22, angle = 0, hjust = .5, vjust = 0, face = "italic"),
+        axis.title.y = element_text(color = "grey20", size = 22, angle = 90, hjust = .5, vjust = 1, face = "italic"),
+        legend.text = element_text(color = "grey20", size = 16, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        legend.title = element_blank())
+
+ggsave("Figures/Reference_Surveillance.png",
+       plot,
+       width =  7,
+       height = 6,
+       bg = "white", dpi = 300)
+
 
 ################################################################################
 #CPRD - no waning
@@ -14,7 +83,7 @@ plot3 <- yearly_cases_fig_flexible_new("D2_3.rda", "D1_1.rda",
                                        "MMR2 +3%","MMR1 +1%", 
                                        "#3a95b1","#ed5f54" )
 
-library(cowplot)
+
 plt <- plot_grid(plot1, plot2, plot3,
                  ncol = 1, nrow = 3, 
                  labels = c('A', 'B', 'C'),
@@ -26,7 +95,7 @@ ggsave("Figures/Coverage_CPRD_no_waning.png",
        plt,
        width =  6,
        height = 14,
-       bg = "white")
+       bg = "white", dpi = 300)
 
 
 #changing schedule
@@ -62,7 +131,7 @@ ggsave("Figures/Schedule_CPRD_no_waning.png",
        plt,
        width =  12,
        height = 14,
-       bg = "white")
+       bg = "white", dpi = 300)
 
 ###############################################################################
 
@@ -90,7 +159,7 @@ ggsave("Figures/Coverage_COVER_no_waning.png",
        plt,
        width =  6,
        height = 14,
-       bg = "white")
+       bg = "white", dpi = 300)
 
 #changing schedule
 plot1 <- yearly_cases_fig_flexible_higher_y("reference_cover.rda", "MMR2_at_5_cover.rda",
@@ -125,7 +194,7 @@ ggsave("Figures/Schedule_COVER_no_waning.png",
        plt,
        width =  12,
        height = 14,
-       bg = "white")
+       bg = "white", dpi = 300)
 
 ################################################################################
 #CPRD with waning 
@@ -169,7 +238,7 @@ ggsave("Figures/Schedule_CPRD_waning_all.png",
        plt,
        width =  12,
        height = 16,
-       bg = "white")
+       bg = "white", dpi = 300)
 
 
 
@@ -220,7 +289,7 @@ ggsave("Figures/Age_dist.png",
        plt,
        width =  14,
        height = 11,
-       bg = "white")
+       bg = "white", dpi = 300)
 ###############################################################################
 #age proportiongs for  cover
 
@@ -268,7 +337,7 @@ ggsave("Figures/Age_dist_cover.png",
        plt,
        width =  14,
        height = 11,
-       bg = "white")
+       bg = "white", dpi = 300)
 
 ##############################################################################
 #age proportiongs for  CPRD with waning 
@@ -327,6 +396,53 @@ ggsave("Figures/Age_dist_CPRD_waning.png",
        plt,
        width =  18,
        height = 11,
-       bg = "white")
+       bg = "white", dpi = 300)
 
-#
+###############################################################################
+#plot yearly coverage - Figure 1
+df <- data.table(read.csv2(paste0("Data/",
+                                      "Coverage_reg_year_orig_extrapol.csv")))
+df[, cov5y := as.numeric(cov5y)]
+df[, cov5y := cov5y*100]
+df[, cov2y := as.numeric(cov2y)*100]
+ex <- df[n_dose == 1][, cov5y := cov2y][, n_dose := 3]
+df <- rbind(df, ex)
+
+df[, region := factor(region, levels = c("east midlands", "east of england",
+                                         "london" ,"north east", "north west", 
+                                         "south east" , "south west", "west midlands",
+                                         "yorkshire and the humber"), 
+                      labels = c("EM", "EE", "LND", "NE", "NW", "SE", "SW", "WM",
+                                 "YH") )]
+df[, n_dose := factor(n_dose, levels = c(3, 1, 2), 
+                      labels = c( "MMR1 - age 2", "MMR1 - age 5", "MMR2 - age 5"))]
+
+plot <- df%>%
+  ggplot(aes(x = year, group = region))+
+  geom_line(aes(y = cov5y, color = region), linewidth = 1)+
+  facet_grid(~n_dose)+
+  scale_color_manual(values = c("#ef476f", "#F78C8B", "#ffd166", "#83d483", "#06d6a0",
+                                "#0cb0a9", "#118ab2", "#0c637f", "#073b4c"))+ 
+  labs(color = "Region")+
+  scale_x_continuous(name = "Year", breaks = c(2005, 2010, 2015, 2019))+
+  ylab("Coverage (%)")+
+  ylim(0,100)+
+  geom_vline(xintercept = 2010, linetype = "dashed")+
+  theme_classic()+
+  theme(legend.position="bottom",
+        axis.text.x = element_text(color = "grey20", size = 20, angle = 45, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "grey20", size = 20, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "grey20", size = 18, angle = 0, hjust = .5, vjust = 0, face = "italic"),
+        axis.title.y = element_text(color = "grey20", size = 18, angle = 90, hjust = .5, vjust = 1, face = "italic"),
+        legend.text = element_text(color = "grey20", size = 18, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        legend.title = element_text(size=18),
+        plot.title = element_text(vjust = 1,hjust = 1, size = 20),
+        panel.spacing.y = unit(5, "lines"),
+        strip.text.x = element_text(size = 18))
+
+
+ggsave("Figures/Fig_1_coverage.png",
+       plot,
+       width =  18,
+       height = 8,
+       bg = "white", dpi = 300)

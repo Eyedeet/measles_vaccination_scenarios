@@ -1,7 +1,8 @@
+#Sensivity analyses - simulation only from 2015 onwards
 ################################################################################
 #Outbreak scnenarios
-#-COVER data
-#-no waning
+#-CPRD data
+#- no waning
 ################################################################################
 
 #set up
@@ -10,7 +11,7 @@ source("R/function_figures.R")
 source("R/function_vaccination_data.R")
 
 ## Import libraries 
-#devtools::install_github("alxsrobert/seirvodin")
+devtools::install_github("alxsrobert/seirvodin")
 library(seirvodin)
 library(dplyr)
 library(socialmixr)
@@ -35,11 +36,11 @@ clean_mcmc_pars <- function(mcmc_pars){
 }
 
 
-create_scenario <- function(scenario_name, burnin = 5000, waning = "no", vax = "cover"){
+create_scenario <- function(scenario_name, burnin = 5000, waning = "no", vax = "cprd"){
   scenario <- scenario_name
   # Number of simulations per sample
-  n_part <- 100
-  n_samples <- 25
+  n_part <- 25
+  n_samples <- 100
   
   #### Import data and model fit ####
   
@@ -58,7 +59,7 @@ create_scenario <- function(scenario_name, burnin = 5000, waning = "no", vax = "
   ## Import the different data streams into a list.
   # Use scenario to move between vaccine scenarios (early / early_timely etc..)
   all_data <- import_all_data(year_start = year_start, N_year = N_year, 
-                              scenario = scenario, vax = "cover", regions = regions, 
+                              scenario = scenario, vax = "cprd", regions = regions, 
                               year_per_age = year_per_age)
   
   
@@ -70,14 +71,14 @@ create_scenario <- function(scenario_name, burnin = 5000, waning = "no", vax = "
   
   ## Import the parameter estimates
   if(waning == "no"){
-    if(vax == "cover"){
-      pmcmc_run <- readRDS("Output/cover_degree/no.RDS")
+    if(vax == "cprd"){
+      pmcmc_run <- readRDS("Output/cprd_degree/no.RDS")
     } else if (vax == "cover"){
       pmcmc_run <- readRDS("Output/cover_degree/no.RDS")
     }
   } else if(waning %in% c("since_vax", "early")){
-    if(vax == "cover"){
-      pmcmc_run <- readRDS("Output/cover_degree/since_vax.RDS")
+    if(vax == "cprd"){
+      pmcmc_run <- readRDS("Output/cprd_degree/since_vax.RDS")
     } else if (vax == "cover"){
       pmcmc_run <- readRDS("Output/cover_degree/since_vax.RDS")
     }
@@ -97,108 +98,38 @@ create_scenario <- function(scenario_name, burnin = 5000, waning = "no", vax = "
 
 
 set.seed(1)
+
+##############################################################################
 #### Analysis of all_output ####
 reference <- create_scenario(scenario_name = "reference")
-saveRDS(reference, file="Output/models/reference_cover.rda")
+saveRDS(reference, file="Output/models/reference_2015.rda")
 rm(reference)
 gc()
 
 
-early_second <- create_scenario(scenario_name = "early")
-saveRDS(early_second, file="Output/models/early_second_cover.rda")
+early_second <- create_scenario(scenario_name = "CPRD_earlyMMR2_2015")
+saveRDS(early_second, file="Output/models/early_second_2015.rda")
 rm(early_second)
 gc()
 
-MMR2_as_MMR1 <- create_scenario(scenario_name = "cover_MMR2likeMMR1")
-saveRDS(MMR2_as_MMR1, file="Output/models/MMR2_as_MMR1_cover.rda")
-rm(MMR2_as_MMR1)
-gc() 
-
-
-MMR2_at_5 <- create_scenario(scenario_name = "cover_lateMMR2")
-saveRDS(MMR2_at_5, file="Output/models/MMR2_at_5_cover.rda")
-rm(MMR2_at_5)
-gc()
-
-
-D2_earlyplus1 <- create_scenario(scenario_name = "cover_earlyMMR2plus1")
-saveRDS(D2_earlyplus1, file="Output/models/D2_earlyplus1_cover.rda")
-rm(D2_earlyplus1)
-gc()
-
-D2_earlyplus3<- create_scenario(scenario_name = "cover_earlyMMR2plus3")
-saveRDS(D2_earlyplus3, file="Output/models/D2_earlyplus3_cover.rda")
-rm(D2_earlyplus3)
-gc()
-
-
-
-D1_05 <- create_scenario(scenario_name = "cover_MMR1plus05") 
-saveRDS(D1_05, file="Output/models/D1_05_cover.rda")
-rm(D1_05)
-gc()
-
-
-D1_1 <- create_scenario(scenario_name = "cover_MMR1plus1")
-saveRDS(D1_1, file="Output/models/D1_1_cover.rda")
-rm(D1_1)
-gc()
-
-D2_1 <- create_scenario(scenario_name = "cover_MMR2plus1")
-saveRDS(D2_1, file="Output/models/D2_1_cover.rda")
-rm(D2_1)
-gc()
-
-
-D2_3 <- create_scenario(scenario_name = "cover_MMR2plus3")
-saveRDS(D2_3, file="Output/models/D2_3_cover.rda")
-rm(D2_3)
-gc()
-
-
-
-D2_minus3 <- create_scenario(scenario_name = "cover_earlyMMR2minus3")
-saveRDS(D2_minus3, file="Output/models/D2_minus3_cover.rda")
-rm(D2_minus3)
-gc()
-
-D2_minus5 <- create_scenario(scenario_name = "cover_earlyMMR2minus5")
-saveRDS(D2_minus5, file="Output/models/D2_minus5_cover.rda")
-rm(D2_minus5)
-gc()
-
-
-
-#---summary table for results
-all_models <- list.files("Output/models/", pattern = "_cover")
-tmp <- readRDS(paste0("Output/models/", all_models[1]))
+#compare the results
+tmp <- readRDS("Output/models/reference_2015.rda")
 tmp <- tmp[grep("new_I", rownames(tmp)), ,]
+#filter only the last 5 years (2015-2020)
+tmp <- tmp[, , 6:10]
 summary_table <- summary(apply(tmp, 2, sum))
-rm(tmp)
-gc()
 
-
-
-for(i in 2:length(all_models)){
-  tmp <- readRDS(paste0("Output/models/", all_models[i]))
-  tmp <- tmp[grep("new_I", rownames(tmp)), ,]
-  row <- summary(apply(tmp, 2, sum))
-  rm(tmp)
-  summary_table <- rbind(summary_table, row)
-  gc()
-}
-
-#check mames
-summary_table <- cbind(c("MMR1 +0.5",
-                        "MMR1 +1",
-                        "MMR2 +1",
-                         "MMR2 + 3",
-                        "early +1", "early + 3",
-                         "MMR2 early -3","MMR2 early -5","early second","early MMR2 like MMR1",
-                         "MMR2 at 5", "reference"), summary_table)
+tmp2 <- readRDS("Output/models/early_second_2015.rda")
+tmp2 <- tmp2[grep("new_I", rownames(tmp2)), ,]
+#filter only the last 5 years (2015-2020)
+tmp2 <- tmp2[, , 6:10]
+summary_table <- rbind(summary_table, 
+                       summary(apply(tmp2, 2, sum)))
+summary_table <- cbind(summary_table, c("Reference 2015-2020",
+                         "Early MMR2 2015-2020"))
 summary_table <- as.data.table(summary_table)
 summary_table[, result := paste0(`Median`, " (", `1st Qu.`, "; ", `3rd Qu.`, ")")]
-med_ref <- as.numeric(summary_table$Median[12])
+med_ref <- as.numeric(summary_table$Median[1])
 summary_table[, Median := as.numeric(Median)]
 summary_table[, `1st Qu.` := as.numeric(`1st Qu.`)]
 summary_table[, `3rd Qu.` := as.numeric(`3rd Qu.`)]
@@ -206,5 +137,33 @@ summary_table[, diff_per := paste0(round(  (((med_ref-Median)/med_ref)*100), dig
                                    " (" , round((((med_ref-`3rd Qu.`)/med_ref)*100), digits = 2),
                                    "; ", round((((med_ref-`1st Qu.`)/med_ref)*100), digits = 2),")")]
 
-write.csv2(summary_table, file = "Output/Summary_table_COVER.csv", dec = ".")
 
+#table of yearly cases by scenario
+yearly_cases <- function(output){
+  tmp <- readRDS(paste0("Output/models/", output))
+  rows_new_cases <- rownames(tmp)[grep("new_I", rownames(tmp))]
+  yearly_cases <- data.table(year =  seq(2010, 2019, 1),
+                             median = rep(0, times = 10),
+                             lb = rep(0, times = 10),
+                             ub = rep(0, times = 10))
+  
+  for(i in 1:10){
+    
+    dt <- tmp[, , i]
+    summary_table <- summary(apply(dt, 2, sum))
+    yearly_cases$median[i] <- summary_table[[3]]
+    yearly_cases$lb[i] <- summary_table[[2]]
+    yearly_cases$ub[i] <- summary_table[[5]]
+  }
+  
+  return(yearly_cases)
+}
+
+tmp1 <- yearly_cases("reference_2015.rda")
+tmp2 <- yearly_cases("early_second_2015.rda")
+res <- cbind(tmp1, tmp2)
+colnames(res) <- c("year", "median",  "lb", "ub", "year" ,"median.1" ,
+                    "lb.1",    "ub.1"  )
+res[, diff_MMR2early := paste0(round((((median-median.1)/median)*100), digits = 2),
+                           " (" , round((((median-ub.1)/median)*100), digits = 2),
+                           "; ", round((((median-lb.1)/median)*100), digits = 2),")")]
