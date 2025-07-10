@@ -54,14 +54,14 @@ source('R/Outbreak_sencarios_CPRD.R')
 
 #sensitivity analyses
 #waning from the age of 5 since vaccination
-source('R/Outbreak_sencarios_CPRD_waning.R')
+source('R/Outbreak_scenarios_CPRD_waning.R')
 #waning from the age of 3 since vaccination
 source('R/Outbreak_scenarios_CPRD_waning_from3.R')
 #COVER data used instead of CPRD data
-source('R/Outbreak_sencarios_COVER.R')
+source('R/Outbreak_scnenarios_COVER.R')
 
 ```
-The runtime is around 34min per scenario. To reduce the runtime change the number of samples (parameter `n_samples`) in line 44 line of `R/Outbreak_sencarios_CPRD.R`. The waning and vax parameter in the create_scenario() need to be specified according to underlying assumption of waning (no = no waning, since_vax = waning from the age of five since vaccination, early = waning from the age of 3 since vaccination) and the vaccination dataset used (cprd = Clinical Research Practice Datalink, cover = COVER). The files with the parameter estimates based on the fitted model are available on the repository and were generated from parameter estimates using the actual case data.
+The runtime is around 34min per scenario. To reduce the runtime change the number of samples (parameter `n_samples`) in line 44 line of `R/Outbreak_scenarios_CPRD.R`. The waning and vax parameter in the create_scenario() need to be specified according to underlying assumption of waning (no = no waning, since_vax = waning from the age of five since vaccination, early = waning from the age of 3 since vaccination) and the vaccination dataset used (cprd = Clinical Research Practice Datalink, cover = COVER). The files with the parameter estimates based on the fitted model are available on the repository and were generated from parameter estimates using the actual case data.
 The overall runtime does not exceed 37 hours for running 16 scenarios per script on a virtual machine with a 32-Core 3.0 GHz processor and 128 GB RAM. 
 
 Finally, to generate the figures describing simulations for each scenario, run the following command:

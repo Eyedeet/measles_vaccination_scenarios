@@ -112,30 +112,6 @@ saveRDS(early_second, file="Output/models/early_second_2015.rda")
 rm(early_second)
 gc()
 
-#compare the results
-tmp <- readRDS("Output/models/reference_2015.rda")
-tmp <- tmp[grep("new_I", rownames(tmp)), ,]
-#filter only the last 5 years (2015-2020)
-tmp <- tmp[, , 6:10]
-summary_table <- summary(apply(tmp, 2, sum))
-
-tmp2 <- readRDS("Output/models/early_second_2015.rda")
-tmp2 <- tmp2[grep("new_I", rownames(tmp2)), ,]
-#filter only the last 5 years (2015-2020)
-tmp2 <- tmp2[, , 6:10]
-summary_table <- rbind(summary_table, 
-                       summary(apply(tmp2, 2, sum)))
-summary_table <- cbind(summary_table, c("Reference 2015-2020",
-                         "Early MMR2 2015-2020"))
-summary_table <- as.data.table(summary_table)
-summary_table[, result := paste0(`Median`, " (", `1st Qu.`, "; ", `3rd Qu.`, ")")]
-med_ref <- as.numeric(summary_table$Median[1])
-summary_table[, Median := as.numeric(Median)]
-summary_table[, `1st Qu.` := as.numeric(`1st Qu.`)]
-summary_table[, `3rd Qu.` := as.numeric(`3rd Qu.`)]
-summary_table[, diff_per := paste0(round(  (((med_ref-Median)/med_ref)*100), digits = 2),
-                                   " (" , round((((med_ref-`3rd Qu.`)/med_ref)*100), digits = 2),
-                                   "; ", round((((med_ref-`1st Qu.`)/med_ref)*100), digits = 2),")")]
 
 
 #table of yearly cases by scenario
@@ -161,9 +137,19 @@ yearly_cases <- function(output){
 
 tmp1 <- yearly_cases("reference_2015.rda")
 tmp2 <- yearly_cases("early_second_2015.rda")
-res <- cbind(tmp1, tmp2)
-colnames(res) <- c("year", "median",  "lb", "ub", "year" ,"median.1" ,
-                    "lb.1",    "ub.1"  )
-res[, diff_MMR2early := paste0(round((((median-median.1)/median)*100), digits = 2),
-                           " (" , round((((median-ub.1)/median)*100), digits = 2),
-                           "; ", round((((median-lb.1)/median)*100), digits = 2),")")]
+
+tmp1 <- tmp1[year >=2018]
+tmp2 <- tmp2[year >=2018]
+
+med1 <- sum(tmp1$median)
+lb1 <- sum(tmp1$lb)
+ub1 <- sum(tmp1$ub)
+
+med2 <- sum(tmp2$median)
+lb2<- sum(tmp2$lb)
+ub2 <- sum(tmp2$ub)
+
+#print difference
+paste0(round((((med1-med2)/med1)*100), digits = 2),
+                           " (" , round((((med1-ub2)/med1)*100), digits = 2),
+                           "; ", round((((med1-lb2)/med1)*100), digits = 2),")")

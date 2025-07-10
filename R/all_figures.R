@@ -102,19 +102,19 @@ ggsave("Figures/Coverage_CPRD_no_waning.png",
 plot1 <- yearly_cases_fig_flexible_higher_y("reference.rda", "MMR2_at_5.rda",
                                             "Reference","School entry MMR2", 
                                             "#2c5985","#c4263e")
-plot2<- yearly_cases_fig_flexible_new("reference.rda", "early_second.rda",
+plot2<- yearly_cases_fig_flexible_higher_y("reference.rda", "early_second.rda",
                                       "Reference","Early MMR2", 
                                       "#2c5985","#ed5f54")
-plot3 <- yearly_cases_fig_flexible_new("early_second.rda", "D2_earlyplus1.rda",
+plot3 <- yearly_cases_fig_flexible_higher_y("early_second.rda", "D2_earlyplus1.rda",
                                        "Early MMR2","Early MMR2 +1%", 
                                        "#ed5f54","#3a95b1")
-plot4 <- yearly_cases_fig_flexible_new("D2_earlyplus1.rda", "MMR2_as_MMR1.rda",
+plot4 <- yearly_cases_fig_flexible_higher_y("D2_earlyplus1.rda", "MMR2_as_MMR1.rda",
                                        "Early MMR2 +1%","Early MMR2 like MMR1", 
                                        "#3a95b1","#f77964")
-plot5 <- yearly_cases_fig_flexible_new("early_second.rda", "D2_minus3.rda",
+plot5 <- yearly_cases_fig_flexible_higher_y("early_second.rda", "D2_minus3.rda",
                                        "Early MMR2","Early MMR2 -3%", 
                                        "#ed5f54","#2e5b88")
-plot6 <- yearly_cases_fig_flexible_new("early_second.rda", "D2_minus5.rda",
+plot6 <- yearly_cases_fig_flexible_higher_y("early_second.rda", "D2_minus5.rda",
                                        "Early MMR2","Early MMR2 -5%", 
                                        "#ed5f54","#2a5783")
 
@@ -165,19 +165,19 @@ ggsave("Figures/Coverage_COVER_no_waning.png",
 plot1 <- yearly_cases_fig_flexible_higher_y("reference_cover.rda", "MMR2_at_5_cover.rda",
                                             "Reference","School entry MMR2", 
                                             "#2c5985","#c4263e")
-plot2<- yearly_cases_fig_flexible_new("reference_cover.rda", "early_second_cover.rda",
+plot2<- yearly_cases_fig_flexible_higher_y("reference_cover.rda", "early_second_cover.rda",
                                       "Reference","Early MMR2", 
                                       "#2c5985","#ed5f54")
-plot3 <- yearly_cases_fig_flexible_new("early_second_cover.rda", "D2_earlyplus1_cover.rda",
+plot3 <- yearly_cases_fig_flexible_higher_y("early_second_cover.rda", "D2_earlyplus1_cover.rda",
                                        "Early MMR2","Early MMR2 +1%", 
                                        "#ed5f54","#3a95b1")
-plot4 <- yearly_cases_fig_flexible_new("D2_earlyplus1_cover.rda", "MMR2_as_MMR1_cover.rda",
+plot4 <- yearly_cases_fig_flexible_higher_y("D2_earlyplus1_cover.rda", "MMR2_as_MMR1_cover.rda",
                                        "Early MMR2 +1%","Early MMR2 like MMR1", 
                                        "#3a95b1","#f77964")
-plot5 <- yearly_cases_fig_flexible_new("early_second_cover.rda", "D2_minus3_cover.rda",
+plot5 <- yearly_cases_fig_flexible_higher_y("early_second_cover.rda", "D2_minus3_cover.rda",
                                        "Early MMR2","Early MMR2 -3%", 
                                        "#ed5f54","#2e5b88")
-plot6 <- yearly_cases_fig_flexible_new("early_second_cover.rda", "D2_minus5_cover.rda",
+plot6 <- yearly_cases_fig_flexible_higher_y("early_second_cover.rda", "D2_minus5_cover.rda",
                                        "Early MMR2","Early MMR2 -5%", 
                                        "#ed5f54","#2a5783")
 
@@ -203,25 +203,25 @@ ggsave("Figures/Schedule_COVER_no_waning.png",
 plot1 <- yearly_cases_fig_flexible_higher_y("reference_waningCPRD.rda", "MMR2_at_5_waningCPRD.rda",
                                             "Reference","School entry MMR2", 
                                             "#2c5985","#c4263e")
-plot2<- yearly_cases_fig_flexible_new("reference_waningCPRD.rda", "early_second_waningCPRD.rda",
+plot2<- yearly_cases_fig_flexible_higher_y("reference_waningCPRD.rda", "early_second_waningCPRD.rda",
                                       "Reference","Early MMR2", 
                                       "#2c5985","#ed5f54")
-plot3 <- yearly_cases_fig_flexible_new("early_second_waningCPRD.rda", "D2_earlyplus1_waningCPRD.rda",
+plot3 <- yearly_cases_fig_flexible_higher_y("early_second_waningCPRD.rda", "D2_earlyplus1_waningCPRD.rda",
                                        "Early MMR2","Early MMR2 +1%", 
                                        "#ed5f54","#3a95b1")
-plot4 <- yearly_cases_fig_flexible_new("D2_earlyplus1_waningCPRD.rda", "MMR2_as_MMR1_waningCPRD.rda",
+plot4 <- yearly_cases_fig_flexible_higher_y("D2_earlyplus1_waningCPRD.rda", "MMR2_as_MMR1_waningCPRD.rda",
                                        "Early MMR2 +1%","Early MMR2 like MMR1", 
                                        "#3a95b1","#f77964")
-plot5 <- yearly_cases_fig_flexible_new("early_second_waningCPRD.rda", "D2_minus3_waningCPRD.rda",
+plot5 <- yearly_cases_fig_flexible_higher_y("early_second_waningCPRD.rda", "D2_minus3_waningCPRD.rda",
                                        "Early MMR2","Early MMR2 -3%", 
                                        "#ed5f54","#2e5b88")
-plot6 <- yearly_cases_fig_flexible_new("early_second_waningCPRD.rda", "D2_minus5_waningCPRD.rda",
+plot6 <- yearly_cases_fig_flexible_higher_y("early_second_waningCPRD.rda", "D2_minus5_waningCPRD.rda",
                                        "Early MMR2","Early MMR2 -5%", 
                                        "#ed5f54","#2a5783")
-plot7<- yearly_cases_fig_flexible_new("reference_waningCPRD.rda", "early_second_waning3CPRD.rda",
+plot7<- yearly_cases_fig_flexible_higher_y("reference_waningCPRD.rda", "early_second_waning3CPRD.rda",
                                       "Reference","Early MMR2 waning (3y)", 
                                       "#2c5985","#ed5f54")
-plot8<- yearly_cases_fig_flexible_new("early_second_waningCPRD.rda", "early_second_waning3CPRD.rda",
+plot8<- yearly_cases_fig_flexible_higher_y("early_second_waningCPRD.rda", "early_second_waning3CPRD.rda",
                                       "Early MMR2 (5y) ","Early MMR2 waning (3y)", 
                                       "#2c5985","#3a95b1")
 
@@ -426,7 +426,7 @@ plot <- df%>%
   labs(color = "Region")+
   scale_x_continuous(name = "Year", breaks = c(2005, 2010, 2015, 2019))+
   ylab("Coverage (%)")+
-  ylim(0,100)+
+  coord_cartesian(ylim = c(70, 100))+
   geom_vline(xintercept = 2010, linetype = "dashed")+
   theme_classic()+
   theme(legend.position="bottom",
@@ -446,3 +446,89 @@ ggsave("Figures/Fig_1_coverage.png",
        width =  18,
        height = 8,
        bg = "white", dpi = 300)
+
+###############################################################################
+#regional coverage figures for supplement
+cprd <- data.table(read.csv2(paste0("Data/",
+                                  "Coverage_reg_year_orig_extrapol.csv")))
+cover <- data.table(read.csv2(paste0("Data/",
+                                     "Coverage_reg_year_nhs_extrapol.csv")))
+cover[, cov5y_cover := cov5y]
+
+cprd <- cprd[, list(region, n_dose, year, cov5y)]
+cover <- cover[, list(region, n_dose, year, cov5y_cover)]
+
+df <- merge(cprd, cover, by = c("region", "n_dose", "year"))
+df[, cov5y := as.numeric(cov5y)]
+df[, cov5y_cover := as.numeric(cov5y_cover)]
+df[, cov5y := cov5y*100]
+df[, cov5y_cover := cov5y_cover*100]
+
+df[, region := factor(region, levels = c("east midlands", "east of england",
+                                         "london" ,"north east", "north west", 
+                                         "south east" , "south west", "west midlands",
+                                         "yorkshire and the humber"), 
+                      labels = c("East Midlands", "East of England",
+                                 "London" ,"North East", "North West", 
+                                 "South East" , "South West", "West Midlands",
+                                 "Yorkshire and the Humber") )]
+
+plot1 <- df[n_dose == 1 & year >=2010]%>%
+  ggplot(aes(x = year))+
+  geom_line(aes(y = cov5y, color = region), linewidth = 1)+
+  geom_line(aes(y = cov5y_cover, color = region), linewidth = 1, linetype = "dashed")+
+  facet_wrap(~region, ncol = 3)+
+  scale_color_manual(values = c("#ef476f", "#F78C8B", "#ffd166", "#83d483", "#06d6a0",
+                                "#0cb0a9", "#118ab2", "#0c637f", "#073b4c"))+ 
+  labs(color = "Region")+
+  scale_x_continuous(name = "Year", breaks = c(2010, 2015, 2019))+
+  ylab("Coverage (%)")+
+  coord_cartesian(ylim = c(50, 100))+
+  theme_classic()+
+  theme(legend.position="none",
+        axis.text.x = element_text(color = "grey20", size = 20, angle = 45, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "grey20", size = 20, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "grey20", size = 18, angle = 0, hjust = .5, vjust = 0, face = "italic"),
+        axis.title.y = element_text(color = "grey20", size = 18, angle = 90, hjust = .5, vjust = 1, face = "italic"),
+        legend.text = element_text(color = "grey20", size = 18, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        legend.title = element_text(size=18),
+        plot.title = element_text(vjust = 1,hjust = 1, size = 20),
+        panel.spacing.y = unit(5, "lines"),
+        strip.text.x = element_text(size = 18))
+
+plot2 <- df[n_dose == 2 & year >=2010]%>%
+  ggplot(aes(x = year))+
+  geom_line(aes(y = cov5y, color = region), linewidth = 1)+
+  geom_line(aes(y = cov5y_cover, color = region), linewidth = 1, linetype = "dashed")+
+  facet_wrap(~region, ncol = 3)+
+  scale_color_manual(values = c("#ef476f", "#F78C8B", "#ffd166", "#83d483", "#06d6a0",
+                                "#0cb0a9", "#118ab2", "#0c637f", "#073b4c"))+ 
+  labs(color = "Region")+
+  scale_x_continuous(name = "Year", breaks = c(2010, 2015, 2019))+
+  ylab("Coverage (%)")+
+  coord_cartesian(ylim = c(50, 100))+
+  theme_classic()+
+  theme(legend.position="none",
+        axis.text.x = element_text(color = "grey20", size = 20, angle = 45, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "grey20", size = 20, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "grey20", size = 18, angle = 0, hjust = .5, vjust = 0, face = "italic"),
+        axis.title.y = element_text(color = "grey20", size = 18, angle = 90, hjust = .5, vjust = 1, face = "italic"),
+        legend.text = element_text(color = "grey20", size = 18, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        legend.title = element_text(size=18),
+        plot.title = element_text(vjust = 1,hjust = 1, size = 20),
+        panel.spacing.y = unit(5, "lines"),
+        strip.text.x = element_text(size = 18))
+
+ggsave("Figures/Supp_1_MM1.png",
+       plot1,
+       width =  15,
+       height = 15,
+       bg = "white", dpi = 300)
+
+
+ggsave("Figures/Supp2_MMR2.png",
+       plot2,
+       width =  15,
+       height = 15,
+       bg = "white", dpi = 300)
+

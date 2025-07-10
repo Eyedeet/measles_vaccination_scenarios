@@ -207,6 +207,14 @@ for(i in 2:length(all_models)){
   gc()
 }
 
+#comparing to reference from waning 5
+tmp <- readRDS("Output/models/reference_waningCPRD.rda")
+row <- tmp[grep("new_I", rownames(tmp)), ,]
+summary_table <- summary_table[1:15,]
+summary_table <- rbind(summary_table, row)
+
+
+
 #generating summary table
 summary_table <- cbind(c("MMR1 +0.25","MMR1 +0.5","MMR1 +1",
                          "MMR2 +0.25","MMR2 +0.5","MMR2 +1",

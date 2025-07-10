@@ -184,7 +184,7 @@ yearly_cases_fig_flexible_higher_y <- function(dt_output1, dt_output2, name1, na
     geom_ribbon (aes(ymin = lb_50, ymax = ub_50 ,  fill = scenario ),  alpha = 0.3, linetype = 0)+
     scale_fill_manual(values = c(color1, color2))+
     scale_x_continuous(name = "Year", breaks = c(2011, 2013, 2015, 2017, 2019))+
-    scale_y_continuous(name = "N measles cases", breaks = seq(0, 4000, by = 500), limits = c(0, 4000))+
+    scale_y_continuous(name = "N measles cases", breaks = seq(0, 4000, by = 1000), limits = c(0, 4000))+
     ylab("N measles cases")+
     xlab("Year")+
     theme_classic()+
@@ -281,6 +281,7 @@ plot_age_abs <- function(output1, output2,
     scale_color_manual(name = "Scenario", values = c(col1, col2))+
     ylab("N cases")+
     xlab("Age group")+
+    scale_y_continuous( breaks = c(0, 500, 1000, 1500, 2000, 2500), limits = c(0, 2750))+
     theme_classic()+
     theme(legend.position = "bottom",
           axis.text.x = element_text(size = 12, angle = 45, hjust = 1),
@@ -378,6 +379,7 @@ plot_age_prop <- function(output1, output2,
     geom_errorbar(aes(ymin = lb, ymax = ub), width = 0.2, 
                   position = position_dodge(width = 0.5))+
     scale_color_manual(name = "Scenario", values = c(col1, col2))+
+    scale_y_continuous( breaks = c(0, 5, 10, 15, 20), limits = c(0, 25))+
     ylab("% of cases")+
     xlab("Age group")+
     theme_classic()+

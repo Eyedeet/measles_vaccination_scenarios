@@ -68,7 +68,7 @@ create_scenario <- function(scenario_name, burnin = 5000, waning = "no", vax = "
   )
   
   
-  ## Import the parameter estimates
+  ## Import the parameter estimates   
   if(waning == "no"){
     if(vax == "cprd"){
       pmcmc_run <- readRDS("Output/cprd_degree/no.RDS")
