@@ -138,8 +138,8 @@ yearly_cases <- function(output){
 tmp1 <- yearly_cases("reference_2015.rda")
 tmp2 <- yearly_cases("early_second_2015.rda")
 
-tmp1 <- tmp1[year >=2018]
-tmp2 <- tmp2[year >=2018]
+tmp1 <- tmp1[year >=2015]
+tmp2 <- tmp2[year >=2015]
 
 med1 <- sum(tmp1$median)
 lb1 <- sum(tmp1$lb)
